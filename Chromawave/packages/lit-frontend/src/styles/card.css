@@ -1,0 +1,13 @@
+.card-display {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: auto;
+    grid-gap: 1rem;
+    width: 60%;
+    margin-top: 5%;
+    margin-left: 5%;
+}
+
+img[slot="image"] {
+    width: 100%;
+}
