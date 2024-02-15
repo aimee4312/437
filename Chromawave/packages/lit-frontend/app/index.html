@@ -24,14 +24,12 @@
                     <svg class="icon">
                         <use href="/source-images/icons/icon.svg#icon-profile" />
                     </svg>
-                    <ul slot="menu" >
+                    <ul slot="menu" class="dropdown" >
                         <li><a href="./profile-drop-down/profile.html">Profile</a></li>
                         <li><hr /></li>
                         <li><a href="./profile-drop-down/saved-songs.html">Saved Songs</a></li>
                         <li><hr /></li>
                         <li><a href="./profile-drop-down/saved-palettes.html">Saved Palettes</a></li>
-                        <li><hr /></li>
-                        <li><toggle-switch @change=${this._toggleDarkMode}>Dark Mode</toggle-switch></li>
                         <li><hr /></li>
                         <li>Logout</li>
                     </ul>

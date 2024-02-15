@@ -3,33 +3,43 @@ h1 {
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px; 
-    background-color: var(--secondary-color); 
-    color: var(--secondary-text); 
+    background-color: transparent; 
+    color: var(--secondary-color); 
     margin: 0;
-  }
+}
   
-  svg.icon {
+svg.icon {
     display: inline;
     height: 2em;
     width: 2em;
     vertical-align: top;
     fill: currentColor;
-  }
+}
   
-  a:link, a:visited{
-    color: var(--secondary-text);
+a:link,
+a:visited,
+a:hover{
+    color: var(--secondary-color);
     text-decoration: none;
-  }
-  
-  a:hover {
-      color: var(--primary-accent);
-  }
-  
-  input[type=text]{
+}
+
+.dropdown {
+    background: var(--secondary-color);
+    color: var(--secondary-text);
+    border-radius: 15px;
+}
+
+.dropdown a:link,
+.dropdown a:visited,
+.dropdown a:hover {
+    color: var(--secondary-text);
+}
+
+input[type=text]{
     border-radius: 10px;
-  }
-  
-  .background-container {
+}
+
+.background-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -38,9 +48,9 @@ h1 {
     background-image: url('/source-images/background/musicwave.gif');
     background-size: auto;
     background-position: center;
-  }
-  
-  .container {
+}
+
+.container {
     position: absolute;
     top: 50%;
     width: 60%;
@@ -48,10 +58,10 @@ h1 {
     transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
-  }
-  
-  .searchbar {
+}
+
+.searchbar {
     width: 100%;
     max-width: calc(100% - 3em);
     height: 3em;
-  }
+}
