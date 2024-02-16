@@ -29,8 +29,34 @@ export class UserProfileElement extends LitElement {
     }
 
   render() {
-    // fill this in later
-    return html`...`;
+    return html`
+    <div class="profile-container">
+            <div class="profile-navbar">
+                <img src="../../source-images/randomuser.jpeg" class="profile-img">
+                <div class="name selected-prof-nav">
+                    <a href="./index.html">${this.profile?.name}</a>
+                </div>
+                <div class="saved-songs name">
+                    <a href="./saved-songs.html">Saved Songs</a>
+                </div>
+                <div class="name">
+                    <a href="./saved-palettes.html">Saved Palettes</a>
+                </div>
+            </div>
+            <img src="../../source-images/randomuser.jpeg" class="profile-img img-change">
+            <p class="display-name">${this.profile?.name}</p>
+            <div class="text-input">
+                Name
+                <input type="text" placeholder="${this.profile?.name}">
+                Email
+                <input type="email" placeholder="${this.profile?.email}">
+                New Password
+                <input type="password" placeholder="">
+                Confirm Password
+                <input type="password" placeholder="">
+            </div>
+        </div>
+    `;
   }
 
   static styles = css`...`;
