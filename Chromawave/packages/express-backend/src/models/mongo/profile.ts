@@ -7,7 +7,6 @@ const profileSchema = new Schema<Profile>(
     name: { type: String, required: true, trim: true },
     nickname: { type: String, trim: true },
     city: { type: String, trim: true }
-    airports: [String],
   },
   { collection: "user_profiles" }
 );

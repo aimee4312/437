@@ -3,5 +3,4 @@ export interface Profile {
   name: string;
   nickname?: string;
   city?: string;
-  airports: string[];
 }
