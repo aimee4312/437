@@ -1,7 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Profile } from "../../../express-backend/src/models/profile";
-import { APIRequest, JSONRequest } from "../rest";
+import { serverPath } from "../rest";
 
 @customElement("user-profile")
 export class UserProfileElement extends LitElement {
