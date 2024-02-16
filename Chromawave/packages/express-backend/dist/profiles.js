@@ -30,4 +30,4 @@ function update(userid, profile) {
         });
     });
 }
-exports.default = { index, get, create };
+exports.default = { index, get, create, update };

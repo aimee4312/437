@@ -30,4 +30,4 @@ function update(userid: String, profile: Profile): Promise<Profile> {
   });
 }
 
-export default { index, get, create };
+export default { index, get, create, update };
