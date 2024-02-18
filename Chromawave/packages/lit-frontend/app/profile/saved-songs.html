@@ -11,39 +11,10 @@
         <script type="module" src="../../src/components/toggle-switch.ts"></script>
         <script type="module" src="../../src/components/header-bar.ts"></script>
         <script type="module" src="../../src/components/display-card.ts"></script>
+        <script type="module" src="../../src/components/user-songs.ts"></script>
     </head>
     <body>
         <header-bar></header-bar>
-        <div class="profile-container">
-            <div class="profile-navbar">
-                <img src="../../source-images/randomuser.jpeg" class="profile-img">
-                <div class="name">
-                    <a href="./index.html">User's Name</a>
-                </div>
-                <div class="name selected-prof-nav">
-                    <a href="./saved-songs.html">Saved Songs</a>
-                </div>
-                <div class="name">
-                    <a href="./saved-palettes.html">Saved Palettes</a>
-                </div>
-            </div>
-
-            <div class="profile-display">
-                <a href="https://open.spotify.com/track/3wraoAWcDq4LxPSgrSDIWi?si=5080a40210904a72">
-                    <display-card>
-                        <img slot="image" src="../../source-images/music/from-me-to-you.jpg" alt="Avatar">
-                        <span slot="title">Verglas (Interlude)</span>
-                        <span slot="by">Quadeca</span>
-                    </display-cardd> 
-                </a>
-                <a href="https://open.spotify.com/track/4H8WOZlQmwqBDnGylcv5K0?si=c8d9abea782a496d">
-                    <display-card>
-                        <img slot="image" src="../../source-images/music/icymi.jpg" alt="Avatar">
-                        <span slot="title">Call Me Back</span>
-                        <span slot="by">EDEN</span>
-                    </display-card> 
-                </a>
-            </div>
-        </div>
+        <user-songs path="/api/profiles/aimee4312"></user-songs>
     </body>
 </html>
