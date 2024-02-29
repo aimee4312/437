@@ -50,16 +50,17 @@ export class UserProfileElement extends LitElement {
             </div>
             <img src="../../source-images/randomuser.jpeg" class="profile-img img-change">
             <p class="display-name">${name}</p>
-            <div class="text-input">
-                Name
-                <input type="text" placeholder="${name}">
-                Email
-                <input type="email" placeholder="${email}">
-                New Password
-                <input type="password" placeholder="">
-                Confirm Password
-                <input type="password" placeholder="">
-            </div>
+            <profile-edit path="/api/profiles/aimee4312">
+              <form>
+                <label>
+                  <span>Name</span>
+                  <input name="name" value=${name}/>
+                  <span>Email</span>
+                  <input name="email" value=${email}/>
+                  <button type="submit">Submit</button
+                </label>
+              </form>
+            </profile-edit>
         </div>
     `;
   }
@@ -162,53 +163,5 @@ export class UserProfileElement extends LitElement {
       .then((json: unknown) => {
           if (json) this.profile = json as Profile;
       });
-  }
-}
-
-@customElement("user-profile-edit")
-export class UserProfileEditElement extends UserProfileElement {
-  render() {
-    return html`<form @submit=${this._handleSubmit}>
-        <!-- fill in form here -->
-        <button type="submit">Submit</button>
-    </form> `;
-  }
-
-  static styles = css`...`
-  ;
-
-  _handleSubmit(ev: Event) {
-    ev.preventDefault(); // prevent browser from submitting form data itself
-
-    const target = ev.target as HTMLFormElement;
-    const formdata = new FormData(target);
-    const entries = Array.from(formdata.entries())
-      .map(([k, v]) => (v === "" ? [k] : [k, v]))
-      .map(([k, v]) =>
-        k === "airports"
-          ? [k, (v as string).split(",").map((s) => s.trim())]
-          : [k, v]
-      );
-    const json = Object.fromEntries(entries);
-
-    this._putData(json);
-  }
-
-  _putData(json: Profile) {
-    fetch(serverPath(this.path), {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(json)
-    })
-      .then((response) => {
-        if (response.status === 200) return response.json();
-        else return null;
-      })
-      .then((json: unknown) => {
-        if (json) this.profile = json as Profile;
-      })
-      .catch((err) =>
-        console.log("Failed to PUT form data", err)
-      );
   }
 }
