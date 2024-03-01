@@ -27,7 +27,7 @@ export class UserProfileElement extends LitElement {
         this._fetchData(newValue);
     }
     super.attributeChangedCallback(name, oldValue, newValue);
-    }
+  }
 
   render() {
     const {
@@ -36,32 +36,32 @@ export class UserProfileElement extends LitElement {
     } = (this.profile || {}) as Profile;
     return html`
     <div class="profile-container">
-            <div class="profile-navbar">
-                <img src="../../source-images/randomuser.jpeg" class="profile-img">
-                <div class="name selected-prof-nav">
-                    <a href="./index.html">${name}</a>
-                </div>
-                <div class="saved-songs name">
-                    <a href="./saved-songs.html">Saved Songs</a>
-                </div>
-                <div class="name">
-                    <a href="./saved-palettes.html">Saved Palettes</a>
-                </div>
-            </div>
-            <img src="../../source-images/randomuser.jpeg" class="profile-img img-change">
-            <p class="display-name">${name}</p>
-            <profile-edit path="/api/profiles/aimee4312">
-              <form>
-                <label>
-                  <span>Name</span>
-                  <input name="name" value=${name}/>
-                  <span>Email</span>
-                  <input name="email" value=${email}/>
-                  <button type="submit">Submit</button
-                </label>
-              </form>
-            </profile-edit>
-        </div>
+      <div class="profile-navbar">
+          <img src="../../source-images/randomuser.jpeg" class="profile-img">
+          <div class="name selected-prof-nav">
+              <a href="./index.html">${name}</a>
+          </div>
+          <div class="saved-songs name">
+              <a href="./saved-songs.html">Saved Songs</a>
+          </div>
+          <div class="name">
+              <a href="./saved-palettes.html">Saved Palettes</a>
+          </div>
+      </div>
+      <img src="../../source-images/randomuser.jpeg" class="profile-img img-change">
+      <p class="display-name">${name}</p>
+      <profile-edit path="/api/profiles/aimee4312">
+        <form @submit=${this._handleSubmit}>
+          <label>
+            <span>Name</span>
+            <input name="name" value=${name}/>
+            <span>Email</span>
+            <input name="email" value=${email}/>
+            <button type="submit">Submit</button
+          </label>
+        </form>
+      </profile-edit>
+    </div>
     `;
   }
 
@@ -145,9 +145,10 @@ export class UserProfileElement extends LitElement {
     border-bottom-right-radius: 20px;
   }
 
-  .text-input {
+  profile-edit {
     grid-column: 3;
-    grid-row: 2;
+    grid-row: 2 / 4;
+    margin-top: 20px;
   }
   
   `;
@@ -163,5 +164,43 @@ export class UserProfileElement extends LitElement {
       .then((json: unknown) => {
           if (json) this.profile = json as Profile;
       });
+  }
+
+  _handleSubmit(event: Event) {
+    event.preventDefault();
+
+    if (this.profile) {
+      const target = event.target as HTMLFormElement;
+      const formdata = new FormData(target);
+      let entries = Array.from(formdata.entries())
+        .map(([k, v]) => (v === "" ? [k] : [k, v]))
+        .map(([k, v]) =>
+          k === "airports"
+            ? [k, (v as string).split(",").map((s) => s.trim())]
+            : [k, v]
+        );
+
+      const json = Object.fromEntries(entries);
+
+      console.log("Submitting Form", json);
+      fetch(serverPath(this.path), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(json),
+      })
+      .then((response) => {
+        if (response.ok) {
+          // Reload profile data after successful update
+          this._fetchData(this.path);
+        } else {
+          console.error("Failed to update profile");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating profile:", error);
+      });
+    }
   }
 }
