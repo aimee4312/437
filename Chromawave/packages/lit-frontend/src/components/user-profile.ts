@@ -2,6 +2,7 @@ import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Profile } from "../../../express-backend/src/models/profile";
 import { serverPath } from "../rest";
+import "./profile-form";
 
 @customElement("user-profile")
 export class UserProfileElement extends LitElement {
@@ -32,7 +33,6 @@ export class UserProfileElement extends LitElement {
   render() {
     const {
       name,
-      email,
     } = (this.profile || {}) as Profile;
     return html`
     <div class="profile-container">
@@ -50,28 +50,12 @@ export class UserProfileElement extends LitElement {
       </div>
       <img src="../../source-images/randomuser.jpeg" class="profile-img img-change">
       <p class="display-name">${name}</p>
-      <profile-edit path="/api/profiles/aimee4312">
-        <form @submit=${this._handleSubmit}>
-          <label>
-            <span>Name</span>
-            <input name="name" value=${name}/>
-            <span>Email</span>
-            <input name="email" value=${email}/>
-            <button type="submit">Submit</button
-          </label>
-        </form>
-      </profile-edit>
+      <profile-form path="/api/profiles/aimee4312" @form-submitted=${this._handleFormSubmitted}></profile-form>
     </div>
     `;
   }
 
   static styles = css`
-  body {
-    margin: 0;
-    background-color: var(--primary-background);
-    color: var(--secondary-text);
-  }
-
   a:link,
   a:visited {
     color: var(--secondary-text);
@@ -145,13 +129,17 @@ export class UserProfileElement extends LitElement {
     border-bottom-right-radius: 20px;
   }
 
-  profile-edit {
+  profile-form {
     grid-column: 3;
-    grid-row: 2 / 4;
+    grid-row: 2/4;
     margin-top: 20px;
   }
   
   `;
+
+  _handleFormSubmitted = () => {
+    this._fetchData(this.path);
+}
 
   _fetchData(path: string) {
     fetch(serverPath(path))
@@ -164,43 +152,5 @@ export class UserProfileElement extends LitElement {
       .then((json: unknown) => {
           if (json) this.profile = json as Profile;
       });
-  }
-
-  _handleSubmit(event: Event) {
-    event.preventDefault();
-
-    if (this.profile) {
-      const target = event.target as HTMLFormElement;
-      const formdata = new FormData(target);
-      let entries = Array.from(formdata.entries())
-        .map(([k, v]) => (v === "" ? [k] : [k, v]))
-        .map(([k, v]) =>
-          k === "airports"
-            ? [k, (v as string).split(",").map((s) => s.trim())]
-            : [k, v]
-        );
-
-      const json = Object.fromEntries(entries);
-
-      console.log("Submitting Form", json);
-      fetch(serverPath(this.path), {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(json),
-      })
-      .then((response) => {
-        if (response.ok) {
-          // Reload profile data after successful update
-          this._fetchData(this.path);
-        } else {
-          console.error("Failed to update profile");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating profile:", error);
-      });
-    }
   }
 }

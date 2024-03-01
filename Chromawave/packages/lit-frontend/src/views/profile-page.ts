@@ -19,16 +19,6 @@ export class ProfilePageElement extends LitElement{
         return this.location?.params.userid;
     }
 
-    @property({ reflect: true })
-    get edit(): boolean {
-        if (this.location) {
-        const params = new URL(document.location.toString())
-            .searchParams;
-        return params.has("edit");
-        }
-        return false;
-    }
-
     @property({ type: Object })
     profile?: Profile;
 
@@ -46,15 +36,8 @@ export class ProfilePageElement extends LitElement{
     render() {
         return html`
           <main class="page">
-            ${this.edit
-              ? html`
-                  <profile-edit .using=${this.profile}>
-                  </profile-edit>
-                `
-              : html`
                   <user-profile .using=${this.profile}>
                   </user-profile>
-                `}
           </main>
         `;
       }
