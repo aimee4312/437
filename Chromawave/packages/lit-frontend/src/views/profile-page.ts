@@ -1,70 +1,57 @@
-import { html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import * as App from "../app";
+import { Profile } from "../../../express-backend/src/models/profile";
 import "../components/user-profile";
+import "../components/profile-edit";
+import { serverPath } from "../rest";
 
 type ProfileLocation = Location & {
-  params: { userid: string };
+    params: { userid: string };
 };
 
 @customElement("profile-page")
-export class ProfilePageElement extends App.View {
-  @property({ attribute: false })
-  location?: ProfileLocation;
+export class ProfilePageElement extends LitElement{
+    @property({ attribute: false })
+    location?: ProfileLocation;
 
-  @property({ reflect: true })
-  get userid() {
-    return this.location?.params.userid;
-  }
-
-  @property({ reflect: true })
-  get edit(): boolean {
-    if (this.location) {
-      const params = new URL(document.location.toString())
-        .searchParams;
-      return params.has("edit");
+    @property({ reflect: true })
+    get userid() {
+        return this.location?.params.userid;
     }
-    return false;
-  }
 
-  @property()
-  get profile() {
-    return this.getFromModel("profile");
-  }
+    @property({ type: Object })
+    profile?: Profile;
 
-  attributeChangedCallback(
-    name: string,
-    oldValue: string,
-    newValue: string
-  ) {
-    if (
-      name === "userid" &&
-      oldValue !== newValue &&
-      newValue
-    ) {
-      console.log("Profile Page:", newValue);
-      this.dispatchMessage({
-        type: "ProfileSelected",
-        userid: newValue
-      });
+    attributeChangedCallback(
+        name: string,
+        oldValue: string,
+        newValue: string
+        ) {
+        if (name === "path" && oldValue !== newValue && oldValue) {
+            this._fetchData(newValue);
+        }
+        super.attributeChangedCallback(name, oldValue, newValue);
     }
-    super.attributeChangedCallback(name, oldValue, newValue);
-  }
 
-  render() {
-    return html`
-      <main class="page">
-        ${this.edit
-          ? html`
-              <user-profile-edit .using=${this.profile}>
-              </user-profile-edit>
-            `
-          : html`
-              <user-profile .using=${this.profile}>
-              </user-profile>
-            `}
-      </main>
-    `;
-  }
+    render() {
+        return html`
+          <main class="page">
+                  <user-profile .using=${this.profile}>
+                  </user-profile>
+          </main>
+        `;
+      }
 
+    _fetchData(path: string) {
+        fetch(serverPath(path))
+          .then((response) => {
+            if (response.status === 200) {
+              return response.json();
+            }
+            return null;
+          })
+          .then((json: unknown) => {
+              if (json) this.profile = json as Profile;
+          });
+     }
 }
