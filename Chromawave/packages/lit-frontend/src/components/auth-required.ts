@@ -179,38 +179,6 @@ export class AuthRequiredElement extends LitElement {
         });
     }
 
-    static styles = css`
-    :host {
-      display: contents;
-    }
-    dialog {
-      display: flex;
-      gap: 4rem;
-    }
-    form {
-      display: grid;
-      grid-template-columns: [start] 1fr 2fr [end];
-      align-items: baseline;
-    }
-    form > label {
-      display: contents;
-    }
-    form > h2 {
-      grid-column: start / end;
-      text-align: center;
-    }
-    input,
-    button {
-      font: inherit;
-      line-height: inherit;
-      margin: 0.25em;
-    }
-    button {
-      grid-column: 2;
-    }
-  `;
-
-
     _toggleDialog(open: boolean) {
       const dialog = this.shadowRoot?.querySelector(
         "dialog"

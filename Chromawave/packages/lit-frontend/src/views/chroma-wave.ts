@@ -16,7 +16,6 @@ export class ChromaWaveElement extends App.Main{
 
     render() {
         return html`
-        <auth-required>
             <div class="background-container">
                 <h1>
                     <a href="../app/index.html">
@@ -48,7 +47,6 @@ export class ChromaWaveElement extends App.Main{
                 <input type="text" class="searchbar" placeholder="Search...">
             </div>
             <vaadin-router .routes=${routes}> </vaadin-router>
-        </auth-required>
         `;
       }
 

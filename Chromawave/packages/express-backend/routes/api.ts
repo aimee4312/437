@@ -6,3 +6,5 @@ const router = express.Router();
 
 router.use(authenticateUser);
 router.use("/profiles", profileRouter);
+
+export default router;
