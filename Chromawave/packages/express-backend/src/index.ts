@@ -5,7 +5,8 @@ import songs from "./songs";
 import { connect } from "./mongoConnect";
 import { Profile } from "./models/profile";
 import { Songs } from "./models/songs";
-import { loginUser } from "auth";
+import { loginUser, registerUser } from "auth";
+import apiRouter from "../routes/api";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -83,3 +84,5 @@ app.put("/api/songs/:songName", (req: Request, res: Response) => {
 
 // login
 app.post("/login", loginUser);
+app.post("/signup", registerUser);
+app.use("/api", apiRouter);

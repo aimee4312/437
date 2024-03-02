@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import credentials from "../src/credential";
 
 function generateAccessToken(username: string) {
     console.log("Generating token for", username);

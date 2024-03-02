@@ -1,42 +1,54 @@
-import { LitElement, html, unsafeCSS, css } from "lit";
+import { html, unsafeCSS, css } from "lit";
 import { customElement } from "lit/decorators.js";
-import "../components/drop-down";
 import stylesCSS from "../styles/styles.css?inline";
+import "../components/drop-down";
+import "../components/auth-required";
+import "../components/vaadin-router";
+import routes from "../routes";
+import update from "../update";
+import * as App from "../app";
 
 @customElement("chroma-wave")
-export class ChromaWaveElement extends LitElement{
+export class ChromaWaveElement extends App.Main{
+    constructor() {
+        super(update);
+    }
+
     render() {
         return html`
-        <div class="background-container">
-            <h1>
-                <a href="../app/index.html">
-                  <svg class="icon">
-                      <use href="/source-images/icons/icon.svg#icon-home" />
-                  </svg>  
-                </a>
-                <a href="./music/artist.html">Artists</a>
-                <div class="header-title">TBD</div>
-                <a href="./music/music.html">Music</a>
-                <drop-down>
+        <auth-required>
+            <div class="background-container">
+                <h1>
+                    <a href="../app/index.html">
                     <svg class="icon">
-                        <use href="/source-images/icons/icon.svg#icon-profile" />
-                    </svg>
-                    <ul slot="menu" class="dropdown" >
-                        <li><a href="./profile/">Profile</a></li>
-                        <li><hr /></li>
-                        <li><a href="../app/profile/saved-songs.html">Saved Songs</a></li>
-                        <li><hr /></li>
-                        <li><a href="../app/profile/saved-palettes.html">Saved Palettes</a></li>
-                        <li><hr /></li>
-                        <li>Logout</li>
-                    </ul>
-                </drop-down>
-              </h1>
-        </div>
-        
-        <div class="container">
-            <input type="text" class="searchbar" placeholder="Search...">
-        </div>
+                        <use href="/source-images/icons/icon.svg#icon-home" />
+                    </svg>  
+                    </a>
+                    <a href="./music/artist.html">Artists</a>
+                    <div class="header-title">TBD</div>
+                    <a href="./music/music.html">Music</a>
+                    <drop-down>
+                        <svg class="icon">
+                            <use href="/source-images/icons/icon.svg#icon-profile" />
+                        </svg>
+                        <ul slot="menu" class="dropdown" >
+                            <li><a href="./profile/">Profile</a></li>
+                            <li><hr /></li>
+                            <li><a href="../app/profile/saved-songs.html">Saved Songs</a></li>
+                            <li><hr /></li>
+                            <li><a href="../app/profile/saved-palettes.html">Saved Palettes</a></li>
+                            <li><hr /></li>
+                            <li>Logout</li>
+                        </ul>
+                    </drop-down>
+                </h1>
+            </div>
+            
+            <div class="container">
+                <input type="text" class="searchbar" placeholder="Search...">
+            </div>
+            <vaadin-router .routes=${routes}> </vaadin-router>
+        </auth-required>
         `;
       }
 
