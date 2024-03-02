@@ -2,7 +2,6 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Profile } from "../../../express-backend/src/models/profile";
 import "../components/user-profile";
-import "../components/profile-edit";
 import { serverPath } from "../rest";
 
 type ProfileLocation = Location & {

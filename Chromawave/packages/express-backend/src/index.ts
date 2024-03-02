@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { connect } from "./mongoConnect";
 import profiles from "./profiles";
 import songs from "./songs";
+import { connect } from "./mongoConnect";
 import { Profile } from "./models/profile";
 import { Songs } from "./models/songs";
+import { loginUser } from "auth";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -79,3 +80,6 @@ app.put("/api/songs/:songName", (req: Request, res: Response) => {
     .then((song: Songs) => res.json(song))
     .catch((err) => res.status(404).end());
 });
+
+// login
+app.post("/login", loginUser);
