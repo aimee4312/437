@@ -2,7 +2,7 @@
   "name": "lit-frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "app/index.html",
+  "main": "index.html",
   "scripts": {
     "dev": "npx vite",
     "build": "npx tsc && npx vite build",
@@ -11,6 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit": "^3.1.2"
+    "lit": "^3.1.2",
+    "ts-models": "^0.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^10.0.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.5"
   }
 }

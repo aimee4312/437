@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Profile } from "../../../express-backend/src/models/profile";
 

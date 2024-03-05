@@ -2,8 +2,6 @@ import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Profile } from "../../../express-backend/src/models/profile";
 import { serverPath, FormDataRequest, AuthenticatedUser } from "../rest";
-import { authContext } from "./auth-required";
-import { consume } from "@lit/context";
 
 @customElement("profile-form")
 export class ProfileFormElement extends LitElement {
@@ -13,7 +11,6 @@ export class ProfileFormElement extends LitElement {
   @state()
   profile?: Profile;
 
-  @consume({ context: authContext, subscribe: true})
   @property({ attribute: false})
   authenticatedUser?: AuthenticatedUser;
 

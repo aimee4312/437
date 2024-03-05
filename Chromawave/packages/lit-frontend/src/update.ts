@@ -1,5 +1,5 @@
 import { APIRequest, JSONRequest } from "./rest";
-import { Profile } from "../ts-models";
+import { Profile } from "ts-models";
 import * as App from "./app";
 
 const dispatch = App.createDispatch();

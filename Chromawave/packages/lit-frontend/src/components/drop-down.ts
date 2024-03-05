@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
@@ -72,13 +73,13 @@ export class DropDownElement extends LitElement {
     this._toggle(target?.checked);
   }
 
-  _toggle(open) {
+  _toggle(open: boolean) {
     this.open = open;
     this._toggleClickAway(open);
   }
 
-  _toggleClickAway(open) {
-    const clickawayHandler = (ev) => {
+  _toggleClickAway(open: boolean) {
+    const clickawayHandler = (ev: MouseEvent) => {
       if (!ev.composedPath().includes(this)) {
         this._toggle(false);
       } else {
