@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { Songs } from "ts-models";
+import { Songs } from "./models/songs";
 import SongModel from "./models/mongo/songs";
 
 function index(): Promise<Songs[]> {

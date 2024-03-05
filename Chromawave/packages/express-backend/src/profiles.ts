@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { Profile } from "ts-models";
+import { Profile } from "./models/profile";
 import ProfileModel from "./models/mongo/profile";
 
 function index(): Promise<Profile[]> {
