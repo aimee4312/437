@@ -33,7 +33,7 @@ const promises_1 = __importDefault(require("node:fs/promises"));
 const profiles_1 = __importDefault(require("./profiles"));
 const songs_1 = __importDefault(require("./songs"));
 const mongoConnect_1 = require("./mongoConnect");
-//import { loginUser, registerUser } from "auth";
+const auth_1 = require("./auth");
 const api_1 = __importDefault(require("./routes/api"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
@@ -119,5 +119,6 @@ app.use("/app", (req, res) => {
     }
 });
 // login
-// app.post("/signup", registerUser);
+app.post("/login", auth_1.loginUser);
+app.post("/signup", auth_1.registerUser);
 app.use("/api", api_1.default);

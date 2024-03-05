@@ -6,12 +6,10 @@ import { PathLike } from "node:fs";
 import profiles from "./profiles";
 import songs from "./songs";
 import { connect } from "./mongoConnect";
-import { Profile, Credential } from "ts-models";
+import { Profile } from "ts-models";
 import { Songs } from "./models/songs";
-//import { loginUser, registerUser } from "auth";
+import { loginUser, registerUser } from "./auth";
 import apiRouter from "./routes/api";
-import jwt from "jsonwebtoken"; 
-import credential from "credential";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -118,5 +116,6 @@ app.use("/app", (req, res) => {
   }
 });
 // login
-// app.post("/signup", registerUser);
+app.post("/login", loginUser);
+app.post("/signup", registerUser);
 app.use("/api", apiRouter);
