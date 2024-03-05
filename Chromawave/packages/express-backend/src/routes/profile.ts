@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { Profile } from "../src/models/profile";
-import profiles from "../src/profiles";
+import { Profile } from "../models/profile";
+import profiles from "../profiles";
 
 const router = express.Router();
 

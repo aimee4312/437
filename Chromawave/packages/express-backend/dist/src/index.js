@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.authenticateUser = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const path = __importStar(require("path"));
@@ -34,7 +35,9 @@ const profiles_1 = __importDefault(require("./profiles"));
 const songs_1 = __importDefault(require("./songs"));
 const mongoConnect_1 = require("./mongoConnect");
 //import { loginUser, registerUser } from "auth";
-const api_1 = __importDefault(require("./routes/api"));
+const api_1 = __importDefault(require("../routes/api"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const credential_1 = __importDefault(require("credential"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 (0, mongoConnect_1.connect)("chromawave");
@@ -119,5 +122,48 @@ app.use("/app", (req, res) => {
     }
 });
 // login
+function generateAccessToken(username) {
+    return new Promise((resolve, reject) => {
+        if (!process.env.TOKEN_SECRET) {
+            reject("TOKEN_SECRET environment variable is not defined.");
+            return;
+        }
+        jsonwebtoken_1.default.sign({ username: username }, process.env.TOKEN_SECRET, { expiresIn: "1d" }, (error, token) => {
+            if (error)
+                reject(error);
+            else
+                resolve(token);
+        });
+    });
+}
+app.post("/login", (req, res) => {
+    const { username, pwd } = req.body; // from form 
+    if (!username || !pwd) {
+        res.status(400).send("Bad request: Invalid input data.");
+    }
+    else {
+        credential_1.default
+            .verify(username, pwd)
+            .then((goodCreds) => generateAccessToken(goodCreds.username))
+            .then((token) => res.status(200).send({ token: token }))
+            .catch((error) => res.status(401).send("Unauthorized"));
+    }
+});
+function authenticateUser(req, res, next) {
+    const authHeader = req.headers["authorization"];
+    //Getting the 2nd part of the auth header (the token) 
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token)
+        res.status(401).end();
+    else {
+        jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
+            if (decoded)
+                next();
+            else
+                res.status(401).end();
+        });
+    }
+}
+exports.authenticateUser = authenticateUser;
 // app.post("/signup", registerUser);
 app.use("/api", api_1.default);
