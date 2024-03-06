@@ -58,9 +58,6 @@ if (dist)
 app.get("/hello", (req, res) => {
     res.send("Hello, World");
 });
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
 // Profile data
 // app.get("api/profiles/:userid", (req: Request, res: Response) => {
 //   const { userid } = req.params;
@@ -121,3 +118,6 @@ app.use("/app", (req, res) => {
 app.post("/login", auth_1.loginUser);
 app.post("/signup", auth_1.registerUser);
 app.use("/api", api_1.default);
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});

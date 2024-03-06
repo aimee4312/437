@@ -2,8 +2,8 @@
 import { html, LitElement, unsafeCSS } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Profile } from "ts-models";
-import profileCSS from "../styles/profile.css?inline";
-import stylesCSS from "../styles/styles.css?inline";
+import profileCSS from "/src/styles/profile.css?inline";
+import stylesCSS from "/src/styles/styles.css?inline";
 
 type ProfileLocation = Location & {
     params: { userid: string };

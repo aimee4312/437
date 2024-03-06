@@ -39,10 +39,6 @@ app.get("/hello", (req: Request, res: Response) => {
     res.send("Hello, World");
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
 
 // Profile data
 // app.get("api/profiles/:userid", (req: Request, res: Response) => {
@@ -119,3 +115,7 @@ app.use("/app", (req, res) => {
 app.post("/login", loginUser);
 app.post("/signup", registerUser);
 app.use("/api", apiRouter);
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});

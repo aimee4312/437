@@ -1,7 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Profile } from "ts-models";
-import { serverPath } from "../rest";
 import "./profile-form";
 import "./header-bar";
 import "./profile-nav";
@@ -28,7 +27,7 @@ export class UserProfileElement extends LitElement {
         <profile-nav></profile-nav>
         ${this._renderAvatar()}
         <p class="display-name">${name}</p>
-        <profile-form path="/profiles/aimee4312" @form-submitted=${this._handleFormSubmitted}></profile-form>
+        <profile-form path="/profiles/aimee4312"></profile-form>
       </div>
     `;
   }
@@ -156,21 +155,4 @@ export class UserProfileElement extends LitElement {
   }
   
   `;
-
-  _handleFormSubmitted = () => {
-    this._fetchData(this.path);
-}
-
-  _fetchData(path: string) {
-    fetch(serverPath(path))
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        return null;
-      })
-      .then((json: unknown) => {
-          if (json) this.profile = json as Profile;
-      });
-  }
 }
