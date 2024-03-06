@@ -1,7 +1,9 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { Profile } from "../../../express-backend/src/models/profile";
-import { serverPath, FormDataRequest, AuthenticatedUser } from "../rest";
+import { Profile } from "ts-models";
+import { APIUser, APIRequest, JSONRequest } from "../rest";
+import { authContext } from "./auth-required";
+import { consume } from "@lit/context";
 
 @customElement("profile-form")
 export class ProfileFormElement extends LitElement {
@@ -11,12 +13,13 @@ export class ProfileFormElement extends LitElement {
   @state()
   profile?: Profile;
 
-  @property({ attribute: false})
-  authenticatedUser?: AuthenticatedUser;
+  @consume({ context: authContext, subscribe: true })
+  @property({ attribute: false })
+  user?: APIUser;
 
   connectedCallback() {
     if (this.path) {
-      this._fetchData(this.path);
+      this._getData(this.path);
     }
     super.connectedCallback();
   }
@@ -25,11 +28,19 @@ export class ProfileFormElement extends LitElement {
     name: string,
     oldValue: string,
     newValue: string
-    ) {
+  ) {
     if (name === "path" && oldValue !== newValue && oldValue) {
-        this._fetchData(newValue);
+      this._getData(newValue);
     }
     super.attributeChangedCallback(name, oldValue, newValue);
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    console.log("updated Profile Form", changedProperties);
+    if (changedProperties.get("authenticatedUser")) {
+      this._getData(this.path);
+    }
+    return true;
   }
 
   render() {
@@ -68,25 +79,54 @@ export class ProfileFormElement extends LitElement {
   
   `;
 
+  _getData(path: string) {
+    const request = new APIRequest();
+
+    request
+      .get(path)
+      .then((response: Response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return null;
+      })
+      .then((json: unknown) => {
+        this.profile = json as Profile;
+      });
+  }
+
+  _handleChange(event: InputEvent) {
+    const target = event.target as HTMLInputElement;
+    const name = target.name;
+    const value = target.value;
+    let profile = this.profile;
+
+    console.log("Changed", name, value);
+    (profile as any)[name] = value;
+
+    this.profile = profile;
+  }
+
   _handleSubmit(event: SubmitEvent) {
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const data = new FormData(form);
-    const request = new FormDataRequest(data);
-    request.put(this.path)
-    this.dispatchEvent(new CustomEvent("form-submitted"));
-    }
+    const request = new JSONRequest(this.profile);
 
-    _fetchData(path: string) {
-        fetch(serverPath(path))
-        .then((response) => {
-            if (response.status === 200) {
-            return response.json();
-            }
-            return null;
-        })
-        .then((json: unknown) => {
-            if (json) this.profile = json as Profile;
-        });
-    }
+    request
+      .put(this.path)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return null;
+      })
+      .then((json: unknown) => {
+        if (json) {
+          console.log("PUT request successful:", json);
+          this.profile = json as Profile;
+        }
+      })
+      .catch((err) =>
+        console.log("Failed to POST form data", err)
+      );
+  }
 }

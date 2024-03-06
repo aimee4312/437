@@ -30,7 +30,6 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const path = __importStar(require("path"));
 const promises_1 = __importDefault(require("node:fs/promises"));
-const profiles_1 = __importDefault(require("./profiles"));
 const songs_1 = __importDefault(require("./songs"));
 const mongoConnect_1 = require("./mongoConnect");
 const auth_1 = require("./auth");
@@ -63,28 +62,28 @@ app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 // Profile data
-app.get("/api/profiles/:userid", (req, res) => {
-    const { userid } = req.params;
-    profiles_1.default
-        .get(userid)
-        .then((profile) => res.json(profile))
-        .catch((err) => res.status(404).end());
-});
-app.post("/api/profiles", (req, res) => {
-    const newProfile = req.body;
-    profiles_1.default
-        .create(newProfile)
-        .then((profile) => res.status(201).send(profile))
-        .catch((err) => res.status(500).send(err));
-});
-app.put("/api/profiles/:userid", (req, res) => {
-    const { userid } = req.params;
-    const newProfile = req.body;
-    profiles_1.default
-        .update(userid, newProfile)
-        .then((profile) => res.json(profile))
-        .catch((err) => res.status(404).end());
-});
+// app.get("api/profiles/:userid", (req: Request, res: Response) => {
+//   const { userid } = req.params;
+//   profiles
+//     .get(userid)
+//     .then((profile: Profile) => res.json(profile))
+//     .catch((err) => res.status(404).end());
+// });
+// app.post("/api/profiles", (req: Request, res: Response) => {
+//   const newProfile = req.body;
+//   profiles
+//     .create(newProfile)
+//     .then((profile: Profile) => res.status(201).send(profile))
+//     .catch((err) => res.status(500).send(err));
+// });
+// app.put("/api/profiles/:userid", (req: Request, res: Response) => {
+//   const { userid } = req.params;
+//   const newProfile = req.body;
+//   profiles
+//     .update(userid, newProfile)
+//     .then((profile: Profile) => res.json(profile))
+//     .catch((err) => res.status(404).end());
+// });
 // Song data
 app.get("/api/songs/:songName", (req, res) => {
     const { songName } = req.params;

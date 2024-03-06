@@ -1,61 +1,60 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { Profile } from "../../../express-backend/src/models/profile";
+import { Profile } from "ts-models";
 import { serverPath } from "../rest";
 import "./profile-form";
+import "./header-bar";
+import "./profile-nav";
 
 @customElement("user-profile")
 export class UserProfileElement extends LitElement {
-  @property()
-  path: string = "";
+  @property({ attribute: false })
+  using?: Profile;
+
+  get profile() {
+    return this.using || ({} as Profile);
+  }
 
   @state()
-  profile?: Profile;
-
-  connectedCallback() {
-    if (this.path) {
-      this._fetchData(this.path);
-    }
-    super.connectedCallback();
-  }
-
-  attributeChangedCallback(
-    name: string,
-    oldValue: string,
-    newValue: string
-    ) {
-    if (name === "path" && oldValue !== newValue && oldValue) {
-        this._fetchData(newValue);
-    }
-    super.attributeChangedCallback(name, oldValue, newValue);
-  }
+  newAvatar?: string;
 
   render() {
     const {
       name,
     } = (this.profile || {}) as Profile;
     return html`
-    <div class="profile-container">
-      <div class="profile-navbar">
-          <img src="../../source-images/randomuser.jpeg" class="profile-img">
-          <div class="name selected-prof-nav">
-              <a href="./index.html">${name}</a>
-          </div>
-          <div class="saved-songs name">
-              <a href="./saved-songs.html">Saved Songs</a>
-          </div>
-          <div class="name">
-              <a href="./saved-palettes.html">Saved Palettes</a>
-          </div>
+      <header-bar></header-bar>
+      <div class="profile-container">
+        <profile-nav></profile-nav>
+        ${this._renderAvatar()}
+        <p class="display-name">${name}</p>
+        <profile-form path="/profiles/aimee4312" @form-submitted=${this._handleFormSubmitted}></profile-form>
       </div>
-      <img src="../../source-images/randomuser.jpeg" class="profile-img img-change">
-      <p class="display-name">${name}</p>
-      <profile-form path="/api/profiles/aimee4312" @form-submitted=${this._handleFormSubmitted}></profile-form>
-    </div>
     `;
   }
 
+  _renderAvatar() {
+    const { avatar, name, color } = (this.profile ||
+      {}) as Profile;
+    const url = this.newAvatar || avatar;
+    const avatarImg = url
+      ? html`<img id="avatarImg" src="${url}" />`
+      : ( name || " ").slice(0, 1);
+    const colorStyle = color
+      ? `--avatar-backgroundColor: ${color}`
+      : "";
+
+    return html` <div class="avatar" style=${colorStyle}>
+      ${avatarImg}
+    </div>`;
+  }
+
   static styles = css`
+  :host {
+    --avatar-backgroundColor: var(--color-accent);
+    --avatar-size: 100px;
+  }
+
   a:link,
   a:visited {
     color: var(--secondary-text);
@@ -69,12 +68,33 @@ export class UserProfileElement extends LitElement {
     height: 10%
   }
 
+  .avatar {
+    grid-column: key;
+    grid-row: auto/span 2;
+    justify-self: end;
+    position: relative;
+    width: var(--avatar-size);
+    aspect-ratio: 1;
+    background-color: var(--avatar-backgroundColor);
+    border-radius: 50%;
+    text-align: center;
+    line-height: var(--avatar-size);
+    font-size: calc(0.66 * var(--avatar-size));
+    font-family: var(--font-family-display);
+    color: var(--color-link-inverted);
+    overflow: hidden;
+  }
+
   .display-name {
     grid-column: 3;
     grid-row: 1;
     font-size: 3em;
     align-self: end;
     margin: 0;
+  }
+
+  img {
+    width: 100%;
   }
 
   .img-change {

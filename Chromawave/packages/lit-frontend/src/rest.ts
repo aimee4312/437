@@ -1,6 +1,6 @@
-const API_ROOT = window.location.origin;
+const API_ROOT = "http://localhost:3000/";
 const TOKEN_KEY = "JWT_AUTH_TOKEN";
-const API_PATH = "/api";
+const API_PATH = "api";
 
 export function serverPath(path: string) {
   return `${API_ROOT}${path}`;

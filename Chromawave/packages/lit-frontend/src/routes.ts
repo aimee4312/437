@@ -1,8 +1,7 @@
 import "./views/profile-page";
-import "./views/saved-songs";
+import "./views/chroma-wave";
 
 export default [
   { path: "/app/profile/:userid", component: "profile-page" },
-  { path: "/app/saved-songs/:userid", component: "saved-songs" },
   { path: "(.*)", redirect: "/app" },
 ];

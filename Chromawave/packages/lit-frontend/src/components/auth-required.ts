@@ -1,41 +1,42 @@
 import { css, html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { createContext, provide } from "@lit/context";
-import { AuthenticatedUser, FormDataRequest, APIUser } from "../rest";
+import { APIUser, AuthenticatedUser, FormDataRequest } from "../rest";
 
 export let authContext = createContext<APIUser>("auth");
 
 @customElement("auth-required")
 export class AuthRequiredElement extends LitElement {
-    @state()
-    loginStatus: number = 0;
+  @state()
+  loginStatus: number = 0;
 
-    @state()
-    registerStatus: number = 0;
+  @state()
+  registerStatus: number = 0;
 
-    @provide({ context: authContext})
-
-    @state()
-    user: APIUser = 
-      AuthenticatedUser.authenticateFromLocalStorage(() =>
+  @provide({ context: authContext })
+  @state()
+  user: APIUser =
+    AuthenticatedUser.authenticateFromLocalStorage(() =>
       this._signOut()
     );
 
-    isAuthenticated() {
-      return this.user.authenticated;
-    }
+  isAuthenticated() {
+    return this.user.authenticated;
+  }
 
-    firstUpdated() {
-      this._toggleDialog(!this.isAuthenticated());
-      if (this.isAuthenticated()) {
-        this._dispatchUserLoggedIn(
-          this.user as AuthenticatedUser
-        );
-      }
+  firstUpdated() {
+    this._toggleDialog(!this.isAuthenticated());
+    if (this.isAuthenticated()) {
+      this._dispatchUserLoggedIn(
+        this.user as AuthenticatedUser
+      );
     }
-    
-    render() {
-      const dialog = html`
+  }
+
+  render() {
+    //console.log("Rendering auth-required", this.user);
+
+    const dialog = html`
       <dialog>
         <form
           @submit=${this._handleLogin}
@@ -78,13 +79,14 @@ export class AuthRequiredElement extends LitElement {
         </form>
       </dialog>
     `;
-        return html `
-            ${this.isAuthenticated() ? "" : dialog}
-            <slot></slot>
-        `;
-    }
 
-    static styles = css`
+    return html`
+      ${this.isAuthenticated() ? "" : dialog}
+      <slot></slot>
+    `;
+  }
+
+  static styles = css`
     :host {
       display: contents;
     }
@@ -115,88 +117,88 @@ export class AuthRequiredElement extends LitElement {
     }
   `;
 
-    _handleLogin(event: SubmitEvent) {
-        event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const data = new FormData(form);
-        const request = new FormDataRequest(data);
-    
-        request
-          .base()
-          .post("/login")
-          .then((res) => {
-            if (res.status === 200) {
-              return res.json();
-            } else {
-              this.loginStatus = res.status;
-            }
-          })
-          .then((json) => {
-            if (json) {
-              console.log("Authentication:", json.token);
-              const authenticatedUser =
-                AuthenticatedUser.authenticate(json.token, () =>
-                  this._signOut()
-                );
-              this.user = authenticatedUser;
-              this._toggleDialog(false);
-              this._dispatchUserLoggedIn(authenticatedUser);
-              this.requestUpdate();
-            }
-          });
-    }
+  _handleLogin(event: SubmitEvent) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const data = new FormData(form);
+    const request = new FormDataRequest(data);
 
-    _dispatchUserLoggedIn(user: AuthenticatedUser) {
-      const userLoggedIn = new CustomEvent("mvu:message", {
-        bubbles: true,
-        composed: true,
-        detail: {
-          type: "UserLoggedIn",
-          user
+    request
+      .base()
+      .post("login")
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          this.loginStatus = res.status;
+        }
+      })
+      .then((json) => {
+        if (json) {
+          console.log("Authentication:", json.token);
+          const authenticatedUser =
+            AuthenticatedUser.authenticate(json.token, () =>
+              this._signOut()
+            );
+          this.user = authenticatedUser;
+          this._toggleDialog(false);
+          this._dispatchUserLoggedIn(authenticatedUser);
+          this.requestUpdate();
         }
       });
-      this.dispatchEvent(userLoggedIn);
-    }
+  }
 
-    _handleRegister(event: SubmitEvent) {
-      event.preventDefault();
-      const form = event.target as HTMLFormElement;
-      const data = new FormData(form);
-      const request = new FormDataRequest(data);
-  
-      request
-        .base()
-        .post("/signup")
-        .then((res) => {
-          if (res.status === 200) {
-            return res.json();
-          } else {
-            this.registerStatus = res.status;
-          }
-        })
-        .then((json) => {
-          console.log("Registration:", json);
-        });
-    }
+  _dispatchUserLoggedIn(user: AuthenticatedUser) {
+    const userLoggedIn = new CustomEvent("mvu:message", {
+      bubbles: true,
+      composed: true,
+      detail: {
+        type: "UserLoggedIn",
+        user
+      }
+    });
+    this.dispatchEvent(userLoggedIn);
+  }
 
-    _toggleDialog(open: boolean) {
-      const dialog = this.shadowRoot?.querySelector(
-        "dialog"
-      ) as HTMLDialogElement | null;
-      if (dialog) {
-        if (open) {
-          console.log("Showing dialog");
-          dialog.showModal();
+  _handleRegister(event: SubmitEvent) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const data = new FormData(form);
+    const request = new FormDataRequest(data);
+
+    request
+      .base()
+      .post("signup")
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
         } else {
-          console.log("Closing dialog");
-          dialog.close();
+          this.registerStatus = res.status;
         }
+      })
+      .then((json) => {
+        console.log("Registration:", json);
+      });
+  }
+
+  _toggleDialog(open: boolean) {
+    const dialog = this.shadowRoot?.querySelector(
+      "dialog"
+    ) as HTMLDialogElement | null;
+    if (dialog) {
+      if (open) {
+        console.log("Showing dialog");
+        dialog.showModal();
+      } else {
+        console.log("Closing dialog");
+        dialog.close();
       }
     }
+  }
 
-    _signOut() {
-      this.user = APIUser.deauthenticate(this.user);
-      this._toggleDialog(!this.isAuthenticated());
-      document.location.reload();
-    }
+  _signOut() {
+    this.user = APIUser.deauthenticate(this.user);
+    this._toggleDialog(!this.isAuthenticated());
+    document.location.reload();
+  }
 }

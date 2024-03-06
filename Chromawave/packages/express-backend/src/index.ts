@@ -45,33 +45,33 @@ app.listen(port, () => {
 
 
 // Profile data
-app.get("/api/profiles/:userid", (req: Request, res: Response) => {
-  const { userid } = req.params;
+// app.get("api/profiles/:userid", (req: Request, res: Response) => {
+//   const { userid } = req.params;
 
-  profiles
-    .get(userid)
-    .then((profile: Profile) => res.json(profile))
-    .catch((err) => res.status(404).end());
-});
+//   profiles
+//     .get(userid)
+//     .then((profile: Profile) => res.json(profile))
+//     .catch((err) => res.status(404).end());
+// });
 
-app.post("/api/profiles", (req: Request, res: Response) => {
-  const newProfile = req.body;
+// app.post("/api/profiles", (req: Request, res: Response) => {
+//   const newProfile = req.body;
 
-  profiles
-    .create(newProfile)
-    .then((profile: Profile) => res.status(201).send(profile))
-    .catch((err) => res.status(500).send(err));
-});
+//   profiles
+//     .create(newProfile)
+//     .then((profile: Profile) => res.status(201).send(profile))
+//     .catch((err) => res.status(500).send(err));
+// });
 
-app.put("/api/profiles/:userid", (req: Request, res: Response) => {
-  const { userid } = req.params;
-  const newProfile = req.body;
+// app.put("/api/profiles/:userid", (req: Request, res: Response) => {
+//   const { userid } = req.params;
+//   const newProfile = req.body;
 
-  profiles
-    .update(userid, newProfile)
-    .then((profile: Profile) => res.json(profile))
-    .catch((err) => res.status(404).end());
-});
+//   profiles
+//     .update(userid, newProfile)
+//     .then((profile: Profile) => res.json(profile))
+//     .catch((err) => res.status(404).end());
+// });
 
 // Song data
 app.get("/api/songs/:songName", (req: Request, res: Response) => {

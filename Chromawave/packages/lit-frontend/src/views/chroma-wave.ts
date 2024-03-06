@@ -18,6 +18,7 @@ export class ChromaWaveElement extends App.Main{
 
     render() {
         return html`
+        <auth-required>
             <div class="background-container">
                 <home-header></home-header>
             </div>
@@ -25,13 +26,17 @@ export class ChromaWaveElement extends App.Main{
                 <input type="text" class="searchbar" placeholder="Search...">
             </div>
             <vaadin-router .routes=${routes}> </vaadin-router>
-        `;
+        </auth-required>
+            `;
       }
 
       static styles = [
         unsafeCSS(stylesCSS),
         css`
-        
+        body {
+            margin: 0;
+        }
+
         input[type=text]{
             border-radius: 10px;
         }

@@ -3,13 +3,11 @@ import { property, state } from "lit/decorators.js";
 import * as MVU from "./mvu";
 import { MsgType } from "./mvu";
 import { AuthenticatedUser, APIUser } from "./rest";
-import { Profile, Route, Point, Songs } from "ts-models";
+import { Profile } from "ts-models";
 
 export interface Model {
   user: APIUser;
   profile?: Profile;
-  songs?: Songs;
-  route?: Route;
 }
 
 export const context = createContext<Model>("ChromaWaveModel");
@@ -32,20 +30,9 @@ export interface ProfileSaved extends MsgType<"ProfileSaved"> {
   profile: Profile;
 }
 
-export interface SongSelected extends MsgType<"SongSelected"> {
-  songId: string;
-}
-
-export interface RouteRequested
-  extends MsgType<"RouteRequested"> {
-  points: Point[];
-}
-
 export type Message =
   | ProfileSelected
   | ProfileSaved
-  | SongSelected
-  | RouteRequested
   | UserLoggedIn;
 
 export class Main
