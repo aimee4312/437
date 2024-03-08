@@ -13,7 +13,7 @@ router.post("/", (req: Request, res: Response) => {
     .catch((err) => res.status(500).send(err));
 });
 
-router.get("/:smiskiName", (req: Request, res: Response) => {
+router.get("/smiski/:smiskiName", (req: Request, res: Response) => {
   const { smiskiName } = req.params;
 
   smiskis

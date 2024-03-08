@@ -4,7 +4,7 @@ import { Smiski } from "ts-models";
 const smiskiSchema = new Schema<Smiski>(
   {
     smiskiName: { type: String, required: true, trim: true },
-    collection: { type: String, required: true, trim: true },
+    collections: { type: String, required: true, trim: true },
     special: { type: Boolean, trim: true },
     photo: { type: String, trim: true }
   },

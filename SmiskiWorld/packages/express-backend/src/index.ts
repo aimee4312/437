@@ -31,6 +31,11 @@ console.log(`Serving ${frontend} from`, dist);
 
 if (dist) app.use(express.static(dist.toString()));
 
+app.get('/', function (req, res) {
+  res.render('index', {});
+});
+
+
 app.use("/app", (req, res) => {
   if (!indexHtml) {
     res

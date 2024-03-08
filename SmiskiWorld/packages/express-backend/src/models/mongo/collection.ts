@@ -1,17 +1,17 @@
 import { Schema, Model, Document, model } from "mongoose";
-import { Collection } from "ts-models";
+import { Collections } from "ts-models";
 
-const CollectionSchema = new Schema<Collection>(
+const CollectionsSchema = new Schema<Collections>(
   {
     series: { type: String, trim: true },
     figures: [String],
   },
-  { collection: "collection" }
+  { collection: "collections" }
 );
 
-const CollectionModel = model<Collection>(
-  "Collection ",
-  CollectionSchema
+const CollectionsModel = model<Collections>(
+  "Collections ",
+  CollectionsSchema
 );
 
-export default CollectionModel;
+export default CollectionsModel;

@@ -1,31 +1,31 @@
 import { Document } from "mongoose";
-import { Collection } from "ts-models";
-import CollectionModel from "./models/mongo/collection";
+import { Collections } from "ts-models";
+import CollectionsModel from "./models/mongo/collection";
 
-function index(): Promise<Collection[]> {
-  return CollectionModel.find();
+function index(): Promise<Collections[]> {
+  return CollectionsModel.find();
 }
 
-function get(smiski: String): Promise<Collection> {
-  return CollectionModel.find({ smiski })
+function get(smiski: String): Promise<Collections> {
+  return CollectionsModel.find({ smiski })
     .then((list) => list[0])
     .catch((err) => {
       throw `${smiski} Not Found`;
     });
 }
 
-function create(smiski: Collection): Promise<Collection> {
-  const p = new CollectionModel(smiski);
+function create(smiski: Collections): Promise<Collections> {
+  const p = new CollectionsModel(smiski);
   return p.save();
 }
 
-function update(userid: String, smiski: Collection): Promise<Collection> {
+function update(userid: String, smiski: Collections): Promise<Collections> {
   return new Promise((resolve, reject) => {
-    CollectionModel.findOneAndUpdate({ userid }, smiski, {
+    CollectionsModel.findOneAndUpdate({ userid }, smiski, {
       new: true,
-    }).then((collection) => {
-      if (collection) resolve(collection);
-      else reject("Failed to update collection");
+    }).then((collections) => {
+      if (collections) resolve(collections);
+      else reject("Failed to update collections");
     });
   });
 }

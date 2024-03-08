@@ -8,7 +8,7 @@ const profileSchema = new mongoose_1.Schema({
     password: { type: String, trim: true },
     smiski_owned: [String],
     num_smiski: { type: String, trim: true },
-    wishlist: { type: String, trim: true }
+    wishlist: [String]
 }, { collection: "user" });
 const ProfileModel = (0, mongoose_1.model)("Profile", profileSchema);
 exports.default = ProfileModel;
