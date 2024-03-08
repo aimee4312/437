@@ -1,5 +1,5 @@
 import { Schema, Model, Document, model } from "mongoose";
-import { Profile } from "../profile";
+import { Profile } from "ts-models";
 
 const profileSchema = new Schema<Profile>(
   {
@@ -7,8 +7,9 @@ const profileSchema = new Schema<Profile>(
     name: { type: String, required: true, trim: true },
     email: { type: String, trim: true },
     password: { type: String, trim: true },
-    smiski_owned: { type: String, trim: true },
-    wishlist: { type: String, trim: true }
+    smiski_owned: [String],
+    num_smiski: { type: String, trim: true },
+    wishlist: [String]
   },
   { collection: "user" }
 );

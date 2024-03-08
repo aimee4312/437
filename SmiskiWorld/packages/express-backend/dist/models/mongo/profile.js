@@ -6,7 +6,8 @@ const profileSchema = new mongoose_1.Schema({
     name: { type: String, required: true, trim: true },
     email: { type: String, trim: true },
     password: { type: String, trim: true },
-    smiski_owned: { type: String, trim: true },
+    smiski_owned: [String],
+    num_smiski: { type: String, trim: true },
     wishlist: { type: String, trim: true }
 }, { collection: "user" });
 const ProfileModel = (0, mongoose_1.model)("Profile", profileSchema);
