@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { Profile, Collection, Smiski } from "ts-models";
+import { Profile, Collections, Smiski } from "ts-models";
 import { serverPath } from "../rest";
 
 @customElement("user-collection")
@@ -12,7 +12,7 @@ export class UserCollectionElement extends LitElement {
     allSmiski: Smiski[] = [];
 
     @state()
-    allColelction: Collection[] = [];
+    allColelction: Collections[] = [];
 
     render() {
         return html`

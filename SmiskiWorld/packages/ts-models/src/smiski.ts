@@ -1,6 +1,6 @@
 export interface Smiski {
     smiskiName: string;
-    collection: string;
+    collections: string;
     special: boolean;
     photo: string;
 }
