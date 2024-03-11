@@ -27,10 +27,16 @@ router.get("/:userid", (req, res) => {
 });
 router.put("/:userid", (req, res) => {
     const { userid } = req.params;
-    const newProfile = req.body;
+    const updatedFields = req.body;
     profiles_1.default
-        .update(userid, newProfile)
-        .then((profile) => res.json(profile))
+        .get(userid)
+        .then((profile) => {
+        if (!profile)
+            throw "Not found";
+        Object.assign(profile, updatedFields);
+        return profiles_1.default.update(userid, profile);
+    })
+        .then((updatedProfile) => res.json(updatedProfile))
         .catch((err) => res.status(404).end());
 });
 exports.default = router;
