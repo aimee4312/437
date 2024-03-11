@@ -3,4 +3,8 @@ export interface Smiski {
     collections: string;
     special: boolean;
     photo: string;
+    bodyType: string;
+    description: string;
+    found: string;
+    pose: string;
 }

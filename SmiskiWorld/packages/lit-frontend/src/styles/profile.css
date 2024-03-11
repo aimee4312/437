@@ -1,3 +1,7 @@
+body {
+    height: 100%;
+}
+
 .display-name {
     grid-column: 3;
     font-size: 3em;
@@ -14,16 +18,10 @@
     font-size: 2em;
 }
 
-.nav-bar-container{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 100px;
-}
-
 .profile-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto;
+    grid-template-rows: repeat(4, 100px);
 }
 
 .profile-display {
@@ -32,7 +30,7 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-gap: 1rem;
     margin: 5%;
-  }
+}
   
 .profile-display a {
     display: inline-block;
@@ -48,14 +46,10 @@
     margin-left: 10%;
 }
 
-profile-nav {
-    grid-row: 1 / -1;
-}
-
 .profile-navbar {
     grid-column: 1 / 5;
-    grid-row: 1 / -1;
-    background-color: var(--primary-background);
+    grid-row: 1 / span 10;
+    background-color: var(--primary-accent);
 }
 
 .selected-prof-nav {

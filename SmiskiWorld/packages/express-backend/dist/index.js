@@ -33,6 +33,7 @@ const promises_1 = __importDefault(require("node:fs/promises"));
 const mongoConnect_1 = require("./mongoConnect");
 const auth_1 = require("./auth");
 const api_1 = __importDefault(require("./routes/api"));
+const websocket_1 = __importDefault(require("./websocket"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 (0, mongoConnect_1.connect)("smiskiworld");
@@ -54,6 +55,8 @@ catch (error) {
 console.log(`Serving ${frontend} from`, dist);
 if (dist)
     app.use(express_1.default.static(dist.toString()));
+app.use(express_1.default.raw({ type: "image/*", limit: "32Mb" }));
+app.use(express_1.default.json({ limit: "500kb" }));
 app.get('/', function (req, res) {
     res.render('index', {});
 });
@@ -71,6 +74,7 @@ app.use("/app", (req, res) => {
 app.post("/login", auth_1.loginUser);
 app.post("/signup", auth_1.registerUser);
 app.use("/api", api_1.default);
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+(0, websocket_1.default)(server);

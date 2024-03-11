@@ -1,31 +1,23 @@
-import { html, unsafeCSS } from "lit";
-import { customElement, state, property } from "lit/decorators.js";
-import { Profile, Smiski } from "ts-models";
-import { serverPath } from "../rest";
+import { css, html, unsafeCSS } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { Collections, Smiski } from "ts-models";
+//import { serverPath } from "../rest";
 import stylesCSS from "/src/styles/styles.css?inline";
-import profileCSS from "/src/styles/profile.css?inline";
-import "../components/profile-nav";
+import cardCSS from "/src/styles/card.css?inline";
 import "../components/header-bar";
 import "../components/display-card";
 import * as App from "../app";
 
-@customElement("user-collection")
-export class UserCollectionElement extends App.View {
+@customElement("smiski-collection")
+export class SmiskiCollectionElement extends App.View {
     @property()
     path: string = "";
 
     @state()
-    profile?: Profile;
- 
-    @state()
     allSmiski: Smiski[] = [];
 
-    // connectedCallback() {
-    //     if (this.path) {
-    //     this._fetchData(this.path);
-    //     }
-    //     super.connectedCallback();
-    // }
+    @state()
+    allCollection: Collections[] = [];
 
     connectedCallback() {
         //if (this.path) {
@@ -37,7 +29,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Smiski Hugging Knees",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/huggingknees.png",
                     special: false,
                     bodyType: "Normal",
                     found: "In corners of a room",
@@ -47,7 +39,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Smiski Looking Back",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/lookingback.png",
                     special: false,
                     bodyType: "Chubby",
                     found: "In corners of a room",
@@ -57,7 +49,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Little Smiski Lifting",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/littlelifting.png",
                     special: true,
                     bodyType: "",
                     found: "",
@@ -67,7 +59,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Little Smiski Lifting",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/littlelifting.png",
                     special: true,
                     bodyType: "",
                     found: "",
@@ -77,7 +69,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Little Smiski Lifting",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/littlelifting.png",
                     special: true,
                     bodyType: "",
                     found: "",
@@ -87,7 +79,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Little Smiski Lifting",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/littlelifting.png",
                     special: true,
                     bodyType: "",
                     found: "",
@@ -97,7 +89,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Little Smiski Lifting",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/littlelifting.png",
                     special: true,
                     bodyType: "",
                     found: "",
@@ -108,23 +100,12 @@ export class UserCollectionElement extends App.View {
         //}
         super.connectedCallback();
     }
-    attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string
-        ) {
-        if (name === "path" && oldValue !== newValue && oldValue) {
-            this._fetchData(newValue);
-        }
-        super.attributeChangedCallback(name, oldValue, newValue);
-    }
 
     render() {
         return html`
-        <header-bar></header-bar>
-        <div class="profile-container">
-                <profile-nav selectedLink="collection"></profile-nav>
-                <div class="profile-display">
+            <header-bar></header-bar>
+            <div class="profile-container">
+                <div class="card-display">
                     ${this.allSmiski.map(smiski_owned => html`
                     <display-card 
                         photo="${smiski_owned.photo}"
@@ -145,37 +126,8 @@ export class UserCollectionElement extends App.View {
 
     static styles = [
         unsafeCSS(stylesCSS),
-        unsafeCSS(profileCSS),
-    ];
+        unsafeCSS(cardCSS),
+        css`
+    `];
 
-    _fetchData(path: string) {
-        fetch(serverPath(path))
-        .then((response) => {
-            if (response.status === 200) {
-            return response.json();
-            }
-            return null;
-        })
-        .then((json: unknown) => {
-            if (json) {
-                this.profile = json as Profile;
-                if (this.profile.smiski_owned) {
-                    this.profile.smiski_owned.forEach(smiskiName => this.fetchAndAppendSmiskiDetails(smiskiName));
-                }
-            }
-        });
-    }
-
-    async fetchAndAppendSmiskiDetails(smiskiName: string) {
-        try {
-            const response = await fetch(serverPath(`/api/smiski/${encodeURIComponent(smiskiName)}`));
-            if (response.ok) {
-                const data = await response.json();
-                const smiskiDetails = data as Smiski;
-                this.allSmiski = [...this.allSmiski, smiskiDetails];
-            }
-        } catch (error) {
-            console.error('Error fetching smiski details:', error);
-        }
-    }
 }

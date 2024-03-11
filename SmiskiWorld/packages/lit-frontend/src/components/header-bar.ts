@@ -1,35 +1,45 @@
 import { html, LitElement, css } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state, property } from "lit/decorators.js";
 import { ToggleSwitchElement } from "./toggle-switch.ts";
+import { Profile } from "ts-models";
+import { consume } from "@lit/context";
+import { authContext } from "./auth-required";
+import { APIUser } from "../rest";
 
 @customElement('header-bar')
 export class HeaderElement extends LitElement {
-  
+  @state()
+    profile?: Profile;
+
+    @consume({ context: authContext, subscribe: true })
+    @property({ attribute: false })
+    user = new APIUser();
+
   render() {
     return html`
     <h1>
-      <a href="../index.html">
+      <a href="./app">
         <svg class="icon">
             <use href="/source-images/icons/icon.svg#icon-home" />
         </svg>  
       </a>
-      <a href="../music/artist.html">Collections</a>
+      <a href="./smiski">Collections</a>
       <div class="header-title">Smiski World</div>
-      <a href="../music/music.html">Forum</a>
+      <a href="./forum">Forum</a>
       <drop-down>
           <svg class="icon">
               <use href="/source-images/icons/icon.svg#icon-profile" />
           </svg>
           <ul slot="menu" >
-              <li><a href="../profile/">Profile</a></li>
+              <li><a href="./profile/aimee4312">Profile</a></li>
               <li><hr /></li>
-              <li><a href="../profile/saved-songs.html">Collection</a></li>
+              <li><a href="./profile/collection">Collection</a></li>
               <li><hr /></li>
-              <li><a href="../profile/saved-palettes.html">Wishlist</a></li>
+              <li><a href="./profile/wishlist">Wishlist</a></li>
               <li><hr /></li>
               <li><toggle-switch @change=${this._toggleDarkMode}>Dark Mode</toggle-switch></li>
               <li><hr /></li>
-              <li>Logout</li>
+              <li><a href="#" @click=${this._signOut}>Logout</a></li>
           </ul>
       </drop-down>
     </h1>`;
@@ -71,4 +81,9 @@ export class HeaderElement extends LitElement {
     if (target?.on) body.classList.add("dark-mode");
     else body.classList.remove("dark-mode");
   }
+
+  _signOut() {
+    console.log("Signout");
+    this.user.signOut();
+}
 }

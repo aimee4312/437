@@ -9,8 +9,8 @@ import "../components/header-bar";
 import "../components/display-card";
 import * as App from "../app";
 
-@customElement("user-collection")
-export class UserCollectionElement extends App.View {
+@customElement("user-wishlist")
+export class UserWishlistElement extends App.View {
     @property()
     path: string = "";
 
@@ -123,7 +123,7 @@ export class UserCollectionElement extends App.View {
         return html`
         <header-bar></header-bar>
         <div class="profile-container">
-                <profile-nav selectedLink="collection"></profile-nav>
+                <profile-nav selectedLink="wishlist"></profile-nav>
                 <div class="profile-display">
                     ${this.allSmiski.map(smiski_owned => html`
                     <display-card 

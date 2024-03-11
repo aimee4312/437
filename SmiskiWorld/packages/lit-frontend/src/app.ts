@@ -3,11 +3,15 @@ import { property, state } from "lit/decorators.js";
 import * as MVU from "./mvu";
 import { MsgType } from "./mvu";
 import { AuthenticatedUser, APIUser } from "./rest";
-import { Profile } from "ts-models";
+import { Profile, Smiski } from "ts-models";
 
 export interface Model {
   user: APIUser;
   profile?: Profile;
+  smiski?: Smiski;
+  smiskiList?: [];
+  userCollections?: [];
+  userWishlist?: [];
 }
 
 export const context = createContext<Model>("ChromaWaveModel");
@@ -30,10 +34,34 @@ export interface ProfileSaved extends MsgType<"ProfileSaved"> {
   profile: Profile;
 }
 
+export interface SmiskiAddedToCollection extends MsgType<"SmiskiAddedToCollection"> {
+  userid: string;
+  smiski: Smiski;
+}
+
+export interface SmiskiRemovedFromCollection extends MsgType<"SmiskiRemovedFromCollection"> {
+  userid: string;
+  smiskiName: string;
+}
+
+export interface SmiskiAddedToWishlist extends MsgType<"SmiskiAddedToWishlist"> {
+  userid: string;
+  smiski: Smiski;
+}
+
+export interface SmiskiRemovedFromWishlist extends MsgType<"SmiskiRemovedFromWishlist"> {
+  userid: string;
+  smiskiName: string;
+}
+
 export type Message =
   | ProfileSelected
   | ProfileSaved
-  | UserLoggedIn;
+  | UserLoggedIn
+  | SmiskiAddedToCollection
+  | SmiskiRemovedFromCollection
+  | SmiskiAddedToWishlist
+  | SmiskiRemovedFromWishlist;
 
 export class Main
   extends MVU.Main<Model, Message>

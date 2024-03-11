@@ -6,6 +6,7 @@ import { PathLike } from "node:fs";
 import { connect } from "./mongoConnect";
 import { loginUser, registerUser } from "./auth";
 import apiRouter from "./routes/api";
+import websockets from "./websocket";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,6 +32,9 @@ console.log(`Serving ${frontend} from`, dist);
 
 if (dist) app.use(express.static(dist.toString()));
 
+app.use(express.raw({ type: "image/*", limit: "32Mb" }));
+app.use(express.json({ limit: "500kb" }));
+
 app.get('/', function (req, res) {
   res.render('index', {});
 });
@@ -54,6 +58,8 @@ app.post("/login", loginUser);
 app.post("/signup", registerUser);
 app.use("/api", apiRouter);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+websockets(server);

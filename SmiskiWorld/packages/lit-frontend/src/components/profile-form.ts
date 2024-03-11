@@ -1,9 +1,12 @@
-import { css, html, LitElement } from "lit";
+import { css, html, LitElement, unsafeCSS } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Profile } from "ts-models";
 import { APIUser, APIRequest, JSONRequest } from "../rest";
 import { authContext } from "./auth-required";
 import { consume } from "@lit/context";
+import stylesCSS from "/src/styles/styles.css?inline";
+import profileCSS from "/src/styles/profile.css?inline";
+
 
 @customElement("profile-form")
 export class ProfileFormElement extends LitElement {
@@ -61,15 +64,18 @@ export class ProfileFormElement extends LitElement {
     `;
   }
 
-  static styles = css`
-  input {
-    margin: 10px;
-    margin-left: 0;
-    width: 300px;
-    height: 10%
-  }
+  static styles = [
+    unsafeCSS(stylesCSS),
+    unsafeCSS(profileCSS),
+    css`
+    input {
+      margin: 10px;
+      margin-left: 0;
+      width: 300px;
+      height: 10%
+    }
   
-  `;
+  `];
 
   _getData(path: string) {
     const request = new APIRequest();

@@ -4,12 +4,12 @@
     --color-slider-forground: #fff;
     --time-slider-transition: 300ms;
 
-    --primary-background: #dde8d0;
+    --primary-background: #ffffff;
     --primary-color: #3176b3;
     --primary-text: var(--primary-color);
-    --primary-accent: #8D98AD;
-    --secondary-color: #2f5540;
-    --secondary-text: #effe9f;
+    --primary-accent: #87c917;
+    --secondary-color: #ffec28;
+    --secondary-text:  #228b21;
     --link-text: #036ebe;
     --error-text: #c00300;
     --disabled: #cfd8dc;

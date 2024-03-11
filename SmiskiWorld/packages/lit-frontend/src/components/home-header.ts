@@ -17,24 +17,24 @@ export class HomeHeaderElement extends LitElement {
     render() {
         return html`
     <h1>
-        <a href="../app/">
+        <a href="./app">
         <svg class="icon">
             <use href="/source-images/icons/icon.svg#icon-home" />
         </svg>  
         </a>
-        <a href="./music/artist.html">Collections</a>
+        <a href="./smiski">Collections</a>
         <div class="header-title">Smiski World</div>
-        <a href="./music/music.html">Forum</a>
+        <a href="./forum">Forum</a>
         <drop-down>
             <svg class="icon">
                 <use href="/source-images/icons/icon.svg#icon-profile" />
             </svg>
             <ul slot="menu" class="dropdown" >
-                <li><a href="/app/profile/aimee4312">Profile</a></li>
+                <li><a href="./profile/aimee4312">Profile</a></li>
                 <li><hr /></li>
-                <li>Collections</li>
+                <li><a href="./profile/collection">Collection</a></li>
                 <li><hr /></li>
-                <li>Wishlist</li>
+                <li><a href="./profile/wishlist">Wishlist</a></li>
                 <li><hr /></li>
                 <li><a href="#" @click=${this._signOut}>Logout</a></li>
             </ul>
@@ -58,7 +58,7 @@ export class HomeHeaderElement extends LitElement {
         height: 2em;
         width: 2em;
         vertical-align: top;
-        fill: var(--secondary-color);
+        fill: var(--secondary-text);
     }
         
     a:link,
