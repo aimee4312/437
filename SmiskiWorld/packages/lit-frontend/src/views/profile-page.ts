@@ -25,7 +25,7 @@ export class ProfilePageElement extends App.View{
       <div class="profile-container">
         <profile-nav selectedLink="profile"></profile-nav>
         <p class="display-name">Aimee</p>
-        <profile-form path="/profile/aimee4312"></profile-form>
+        <profile-form path="/profiles/aimee4312"></profile-form>
       </div>
     `;
   }

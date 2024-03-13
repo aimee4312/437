@@ -5,7 +5,7 @@ import smiskiRouter from "./smiski";
 
 const router = express.Router();
 
-router.use(authenticateUser);
+//router.use(authenticateUser);
 router.use("/profiles", profileRouter);
 router.use("/smiskis", smiskiRouter);
 

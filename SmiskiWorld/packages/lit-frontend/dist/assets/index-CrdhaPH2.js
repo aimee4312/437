@@ -215,7 +215,7 @@
       <div class="profile-container">
         <profile-nav selectedLink="profile"></profile-nav>
         <p class="display-name">Aimee</p>
-        <profile-form path="/profile/aimee4312"></profile-form>
+        <profile-form path="/profiles/aimee4312"></profile-form>
       </div>
     `}};ke.styles=[m(x),m(ge),O`
 

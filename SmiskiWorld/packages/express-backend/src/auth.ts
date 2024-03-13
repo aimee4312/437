@@ -12,7 +12,11 @@ function generateAccessToken(username: string): Promise<string> {
       { expiresIn: "1d" },
       (error, token) => {
         if (error) reject(error);
-        else resolve(token as string);
+        else {
+          console.log(token);
+          resolve(token as string);
+        }
+        
       }
     );
   });
@@ -66,7 +70,7 @@ export function authenticateUser(req: any, res: any, next: any) {
     jwt.verify(
       token,
       process.env.TOKEN_SECRET as string,
-      (decoded: any) => {
+      (_ : any, decoded: any) => {
         if (decoded) {
           console.log("Decoded token", decoded);
           next();

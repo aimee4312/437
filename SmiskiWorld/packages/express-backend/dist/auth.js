@@ -14,8 +14,10 @@ function generateAccessToken(username) {
         jsonwebtoken_1.default.sign({ username: username }, process.env.TOKEN_SECRET, { expiresIn: "1d" }, (error, token) => {
             if (error)
                 reject(error);
-            else
+            else {
+                console.log(token);
                 resolve(token);
+            }
         });
     });
 }
@@ -60,7 +62,7 @@ function authenticateUser(req, res, next) {
         res.status(401).end();
     }
     else {
-        jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET, (decoded) => {
+        jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET, (_, decoded) => {
             if (decoded) {
                 console.log("Decoded token", decoded);
                 next();
