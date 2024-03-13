@@ -123,7 +123,7 @@ export class AuthRequiredElement extends LitElement {
 
     request
       .base()
-      .post("login")
+      .post("/login")
       .then((res) => {
         if (res.status === 200) {
           return res.json();
@@ -166,7 +166,7 @@ export class AuthRequiredElement extends LitElement {
 
     request
       .base()
-      .post("signup")
+      .post("/signup")
       .then((res) => {
         if (res.status === 200) {
           return res.json();

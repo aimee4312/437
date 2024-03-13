@@ -9,7 +9,7 @@ import "../components/header-bar";
 import "../components/display-card";
 import * as App from "../app";
 
-@customElement("user-collection")
+@customElement("user-collections")
 export class UserCollectionElement extends App.View {
     @property()
     path: string = "";
@@ -37,7 +37,7 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Smiski Hugging Knees",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/huggingknees.png",
                     special: false,
                     bodyType: "Normal",
                     found: "In corners of a room",
@@ -47,62 +47,12 @@ export class UserCollectionElement extends App.View {
                 { 
                     smiskiName: "Smiski Looking Back",
                     collections: "Series 1",
-                    photo: "",
+                    photo: "/source-images/smiskis/lookingback.png",
                     special: false,
                     bodyType: "Chubby",
                     found: "In corners of a room",
                     pose: "Looking back",
                     description: "A Smiski that scares easily. When found, it will turn back and stare at you in surprise.",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
                 },
             ];
         //}

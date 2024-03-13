@@ -41,6 +41,7 @@ app.get('/', function (req, res) {
 
 
 app.use("/app", (req, res) => {
+  console.log("hello")
   if (!indexHtml) {
     res
       .status(404)

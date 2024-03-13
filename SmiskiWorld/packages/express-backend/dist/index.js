@@ -61,6 +61,7 @@ app.get('/', function (req, res) {
     res.render('index', {});
 });
 app.use("/app", (req, res) => {
+    console.log("hello");
     if (!indexHtml) {
         res
             .status(404)

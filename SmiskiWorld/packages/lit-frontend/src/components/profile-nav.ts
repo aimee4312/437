@@ -24,18 +24,33 @@ export class ProfileNavElement extends LitElement {
     @property({ type: String })
     selectedLink?: string; // Property to indicate the selected link
 
+    constructor() {
+        super();
+        this._handleLinkClick = this._handleLinkClick.bind(this);
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        document.body.addEventListener("click", this._handleLinkClick);
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        document.body.removeEventListener("click", this._handleLinkClick);
+    }
+
     render() {
         return html`
             <div class="profile-navbar">
                 <img src="../../source-images/randomuser.jpeg" class="profile-img">
                 <div class="name ${this.selectedLink === 'profile' ? 'selected-prof-nav' : ''}">
-                    <a href="./profile/aimee4312">Aimee</a>
+                    <a href="/app/profile/aimee4312">Aimee</a>
                 </div>
                 <div class="saved-songs name ${this.selectedLink === 'collection' ? 'selected-prof-nav' : ''}">
-                    <a href="./collection/aimee4312">Collection</a>
+                    <a href="/app/collection">Collection</a>
                 </div>
                 <div class="name ${this.selectedLink === 'wishlist' ? 'selected-prof-nav' : ''}">
-                    <a href="./wishlist/aimee4312">Wishlist</a>
+                    <a href="/app/wishlist">Wishlist</a>
                 </div>
             </div>
         `;
@@ -45,4 +60,13 @@ export class ProfileNavElement extends LitElement {
         unsafeCSS(profileCSS),
         unsafeCSS(stylesCSS),
     ]
+
+    _handleLinkClick(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('./')) {
+          event.preventDefault();
+          const newPath = target.getAttribute('href') || '';
+          history.pushState({}, '', newPath);
+        }
+      }
 }

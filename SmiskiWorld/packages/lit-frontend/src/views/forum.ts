@@ -82,7 +82,7 @@ export class ChatRoomElement extends App.View {
 
   _handleSubmit(event: SubmitEvent) {
     event.preventDefault();
-    console.log("submit")
+
     if (this.username && this.connection) {
       const target = event.target as HTMLFormElement;
       const formdata = new FormData(target);
