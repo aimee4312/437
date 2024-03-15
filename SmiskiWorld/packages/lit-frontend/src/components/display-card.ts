@@ -38,6 +38,12 @@ export class displayCard extends App.View {
   @property({ type: String }) description = '';
 
   render() {
+    const isInWishlist = this.profile && this.smiskiName && this.profile.wishlist.includes(this.smiskiName);
+    const wishlistButtonText = isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist';
+  
+    const isInCollection = this.profile && this.smiskiName && this.profile.smiski_owned.includes(this.smiskiName);
+    const collectionButtonText = isInCollection ? 'Remove from Collection' : 'Add to Collection';
+  
     return html`
       <div class="card">
         <slot name="image"></slot>
@@ -48,9 +54,9 @@ export class displayCard extends App.View {
             <drop-down>
               <button>+</button>
               <ul slot="menu" >
-                <li><button @click="${this.addToWishlist}">Add to wishlist</button></li>
+                <li><button @click="${this.toggleWishlist}">${wishlistButtonText}</button></li>
                 <li><hr /></li>
-                <li><button @click="${this.addToCollection}">Add to collection</button></li>
+                <li><button @click="${this.toggleCollection}">${collectionButtonText}</button></li>
               </ul>
             </drop-down>
           </div>
@@ -62,8 +68,8 @@ export class displayCard extends App.View {
         </div>
       </div>
     `;
-  }
-  
+  }  
+
 
   static styles = [
     unsafeCSS(cardCSS),
@@ -109,40 +115,58 @@ export class displayCard extends App.View {
       });
   }
 
-  addToWishlist() {
+  toggleWishlist() {
     if (this.user) {
       this._getData(this.user.username);
     }
-    
-    if (this.profile && this.user) {
-        const smiskiName = this.smiskiName;
-        const updatedWishlist = [...this.profile.wishlist, smiskiName];
-        
-        this.dispatchMessage({
-            type: "SmiskiWishlistUpdated",
-            userid: this.profile?.userid,
-            wishlist: updatedWishlist
-        });
-    } else {
-        console.error("Could not update user wishlist.");
-    }
-}
 
-  addToCollection() {
-    if (this.user) {
-      this._getData(this.user.username);
-    }
-    
     if (this.profile && this.user) {
       const smiskiName = this.smiskiName;
-      const updatedCollection = [...this.profile.smiski_owned, smiskiName];
-      
+      const isInWishlist = this.profile.wishlist.includes(smiskiName);
+      let updatedWishlist;
+
+      if (isInWishlist) {
+        updatedWishlist = this.profile.wishlist.filter(item => item !== smiskiName);
+      } else {
+        updatedWishlist = [...this.profile.wishlist, smiskiName];
+      }
+
+      this.profile.wishlist = updatedWishlist;
+
       this.dispatchMessage({
-          type: "SmiskiCollectionUpdated",
-          userid: this.profile?.userid,
-          smiski_owned: updatedCollection
+        type: "SmiskiWishlistUpdated",
+        userid: this.profile?.userid,
+        wishlist: updatedWishlist
       });
-  } else {
+    } else {
+      console.error("Could not update user wishlist.");
+    }
+  }
+
+  toggleCollection() {
+    if (this.user) {
+      this._getData(this.user.username);
+    }
+
+    if (this.profile && this.user) {
+      const smiskiName = this.smiskiName;
+      const isInCollection = this.profile.smiski_owned.includes(smiskiName);
+      let updatedCollection;
+
+      if (isInCollection) {
+        updatedCollection = this.profile.smiski_owned.filter(item => item !== smiskiName);
+      } else {
+        updatedCollection = [...this.profile.smiski_owned, smiskiName];
+      }
+
+      this.profile.smiski_owned = updatedCollection;
+
+      this.dispatchMessage({
+        type: "SmiskiCollectionUpdated",
+        userid: this.profile?.userid,
+        smiski_owned: updatedCollection
+      });
+    } else {
       console.error("Could not update user collection.");
     }
   }

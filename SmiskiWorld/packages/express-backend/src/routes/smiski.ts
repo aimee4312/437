@@ -14,7 +14,6 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-
 router.post("/", (req: Request, res: Response) => {
   const newSmiski = req.body;
 

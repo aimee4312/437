@@ -20,6 +20,9 @@ export class ProfileNavElement extends App.View {
     @property({ type: String })
     selectedLink?: string;
 
+    @state()
+    newAvatar?: string;
+
     render() {
         const {
             name,
@@ -27,7 +30,7 @@ export class ProfileNavElement extends App.View {
         } = (this.profile || {}) as Profile;
         return html`
             <div class="profile-navbar">
-                <img src="../../source-images/randomuser.jpeg" class="profile-img">
+                ${this._renderAvatar()}
                 <div class="name ${this.selectedLink === 'profile' ? 'selected-prof-nav' : ''}">
                     <a href="/app/profile/${userid}">${name}</a>
                 </div>
@@ -75,4 +78,16 @@ export class ProfileNavElement extends App.View {
                 this.profile = json as Profile;
             });
     }
+
+    _renderAvatar() {
+        const { avatar } = (this.profile ||
+          {}) as Profile;
+        const url = this.newAvatar || avatar;
+        const avatarImg = html` <img src="${url}" class="profile-img">`;
+    
+        return html` <div class="avatar">
+          ${avatarImg}
+        </div>`;
+      }
+    
 }

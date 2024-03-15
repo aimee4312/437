@@ -37,9 +37,9 @@ export class HeaderElement extends App.View {
           <ul slot="menu" >
               <li><a href="/app/profile/${userid}">Profile</a></li>
               <li><hr /></li>
-              <li><a href="/app/collection">Collection/${userid}</a></li>
+              <li><a href="/app/collection/${userid}">Collection</a></li>
               <li><hr /></li>
-              <li><a href="/app/wishlist">Wishlis/${userid}</a></li>
+              <li><a href="/app/wishlist/${userid}">Wishlist</a></li>
               <li><hr /></li>
               <li><toggle-switch @change=${this._toggleDarkMode}>Dark Mode</toggle-switch></li>
               <li><hr /></li>

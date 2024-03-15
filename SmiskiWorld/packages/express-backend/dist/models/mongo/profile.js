@@ -6,6 +6,7 @@ const profileSchema = new mongoose_1.Schema({
     name: { type: String, required: true, trim: true },
     email: { type: String, trim: true },
     password: { type: String, trim: true },
+    avatar: { type: String, trim: true },
     smiski_owned: [String],
     num_smiski: { type: String, trim: true },
     wishlist: [String]
