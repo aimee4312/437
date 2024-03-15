@@ -14,7 +14,7 @@ export interface Model {
   userWishlist?: [];
 }
 
-export const context = createContext<Model>("ChromaWaveModel");
+export const context = createContext<Model>("SmiskiWorldModel");
 
 export const init: Model = {
   user: new APIUser()
