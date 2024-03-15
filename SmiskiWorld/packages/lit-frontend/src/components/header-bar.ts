@@ -1,11 +1,13 @@
 import { html, css } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
-import { ToggleSwitchElement } from "./toggle-switch.ts";
 import { Profile } from "ts-models";
 import { consume } from "@lit/context";
 import { authContext } from "./auth-required";
 import { APIUser, APIRequest } from "../rest";
 import * as App from "../app";
+import { ToggleSwitchElement } from "./toggle-switch";
+import "./toggle-switch.ts";
+
 
 @customElement('header-bar')
 export class HeaderElement extends App.View {

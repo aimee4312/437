@@ -10,20 +10,10 @@
     --primary-accent: #87c917;
     --secondary-color: #ffec28;
     --secondary-text:  #228b21;
-    --link-text: #036ebe;
-    --error-text: #c00300;
     --disabled: #cfd8dc;
 }
 
 .dark-mode {
     --primary-background: #262626;
-    --primary-color: #3574b4;
-    --primary-text: #ffffff;
-    --primary-accent: #707b8f;
-    --secondary-color: #3f4754;
-    --secondary-text: #cfd8dc;
-    --link-text: #398EEA;
-    --error-text: #FE3D39;
-    --disabled: #cfd8dc;
 }
 
