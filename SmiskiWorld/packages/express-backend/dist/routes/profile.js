@@ -33,7 +33,8 @@ router.put("/:userid", (req, res) => {
         .then((profile) => {
         if (!profile)
             throw "Not found";
-        Object.assign(profile, updatedFields);
+        const filteredUpdatedFields = Object.fromEntries(Object.entries(updatedFields).filter(([_, value]) => value !== undefined && value !== ""));
+        Object.assign(profile, filteredUpdatedFields);
         return profiles_1.default.update(userid, profile);
     })
         .then((updatedProfile) => res.json(updatedProfile))

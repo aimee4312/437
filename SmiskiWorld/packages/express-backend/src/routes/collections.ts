@@ -13,7 +13,7 @@ router.post("/", (req: Request, res: Response) => {
     .catch((err) => res.status(500).send(err));
 });
 
-router.get("/collection/:collectionName", (req: Request, res: Response) => {
+router.get("/:collectionName", (req: Request, res: Response) => {
   const { collectionName } = req.params;
 
   collections

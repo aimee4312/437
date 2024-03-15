@@ -8,8 +8,8 @@ import "./views/forum";
 
 export default [
   { path: "/app/profile/:userid", component: "profile-page" },
-  { path: "/app/collection", component: "user-collections" },
-  { path: "/app/wishlist", component: "user-wishlist" },
+  { path: "/app/collection/:userid", component: "user-collections" },
+  { path: "/app/wishlist/:userid", component: "user-wishlist" },
   { path: "/app/smiski", component: "smiski-collection" },
   { path: "/app/forum", component: "chat-room" },
   { path: "/app", component: "home-page" },

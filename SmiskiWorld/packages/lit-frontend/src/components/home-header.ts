@@ -1,12 +1,13 @@
-import { html, LitElement, css } from "lit";
+import { html, css } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
 import { Profile } from "ts-models";
 import { consume } from "@lit/context";
 import { authContext } from "./auth-required";
-import { APIUser } from "../rest";
+import { APIUser, APIRequest } from "../rest";
+import * as App from "../app";
 
 @customElement('home-header')
-export class HomeHeaderElement extends LitElement {
+export class HomeHeaderElement extends App.View {
     @state()
     profile?: Profile;
 
@@ -15,6 +16,9 @@ export class HomeHeaderElement extends LitElement {
     user = new APIUser();
 
     render() {
+        const {
+            userid,
+        } = (this.profile || {}) as Profile;
         return html`
     <h1>
         <a href="./">
@@ -30,11 +34,11 @@ export class HomeHeaderElement extends LitElement {
                 <use href="/source-images/icons/icon.svg#icon-profile" />
             </svg>
             <ul slot="menu" class="dropdown" >
-                <li><a href="/app/profile/aimee4312">Profile</a></li>
+                <li><a href="/app/profile/${userid}">Profile</a></li>
                 <li><hr /></li>
-                <li><a href="/app/collection">Collection</a></li>
+                <li><a href="/app/collection/${userid}">Collection</a></li>
                 <li><hr /></li>
-                <li><a href="/app/wishlist">Wishlist</a></li>
+                <li><a href="/app/wishlist/${userid}">Wishlist</a></li>
                 <li><hr /></li>
                 <li><a href="#" @click=${this._signOut}>Logout</a></li>
             </ul>
@@ -81,35 +85,35 @@ export class HomeHeaderElement extends LitElement {
     }
   `;
 
-    // updated(changedProperties: Map<string, unknown>) {
-    //     console.log(
-    //         "Profile Data has been updated",
-    //         changedProperties
-    //     );
-    //     if (changedProperties.has("user")) {
-    //         console.log("New user", this.user);
-    //         const { username } = this.user;
-    //         this._getData(`/app/profile/${username}`);
-    //     }
-    //     return true;
-    // }
+    updated(changedProperties: Map<string, unknown>) {
+        console.log(
+            "Profile Data has been updated",
+            changedProperties
+        );
+        if (changedProperties.has("user")) {
+            console.log("New user", this.user);
+            const { username } = this.user;
+            this._getData(`/profiles/${username}`);
+        }
+        return true;
+    }
 
-    // _getData(path: string) {
-    //     const request = new APIRequest();
+    _getData(path: string) {
+        const request = new APIRequest();
 
-    //     request
-    //         .get(path)
-    //         .then((response: Response) => {
-    //             if (response.status === 200) {
-    //                 return response.json();
-    //             }
-    //             return null;
-    //         })
-    //         .then((json: unknown) => {
-    //             console.log("Profile:", json);
-    //             this.profile = json as Profile;
-    //         });
-    // }
+        request
+            .get(path)
+            .then((response: Response) => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+                return null;
+            })
+            .then((json: unknown) => {
+                console.log("Profile:", json);
+                this.profile = json as Profile;
+            });
+    }
 
     _signOut() {
         console.log("Signout");

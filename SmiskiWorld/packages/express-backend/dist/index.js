@@ -33,6 +33,7 @@ const promises_1 = __importDefault(require("node:fs/promises"));
 const mongoConnect_1 = require("./mongoConnect");
 const auth_1 = require("./auth");
 const api_1 = __importDefault(require("./routes/api"));
+const websocket_1 = __importDefault(require("./websocket"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 (0, mongoConnect_1.connect)("smiskiworld");
@@ -77,4 +78,4 @@ app.use("/api", api_1.default);
 const server = app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
-//websockets(server);
+(0, websocket_1.default)(server);

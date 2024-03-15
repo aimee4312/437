@@ -6,11 +6,11 @@ function index(): Promise<Smiski[]> {
   return SmiskiModel.find();
 }
 
-function get(smiski: String): Promise<Smiski> {
-  return SmiskiModel.find({ smiski })
+function get(smiskiName: String): Promise<Smiski> {
+  return SmiskiModel.find({ smiskiName })
     .then((list) => list[0])
     .catch((err) => {
-      throw `${smiski} Not Found`;
+      throw `${smiskiName} Not Found`;
     });
 }
 

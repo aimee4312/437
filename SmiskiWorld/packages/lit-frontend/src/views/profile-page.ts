@@ -1,5 +1,5 @@
 import { css, html, unsafeCSS } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { Profile } from "ts-models";
 import * as App from "../app";
 import stylesCSS from "/src/styles/styles.css?inline";
@@ -8,24 +8,54 @@ import "../components/profile-form";
 import "../components/header-bar";
 import "../components/profile-nav";
 
+type ProfileLocation = Location & {
+  params: { userid: string };
+};
+
 @customElement("profile-page")
 export class ProfilePageElement extends App.View{
-  using?: Profile;
+  @property({ attribute: false })
+  location?: ProfileLocation;
 
-  get profile() {
-    return this.using || ({} as Profile);
+  @property({ reflect: true })
+  get userid() {
+    return this.location?.params.userid;
   }
 
-  @state()
-  newAvatar?: string;
+  @property()
+  get profile() {
+    return this.getFromModel("profile");
+  }
+
+  attributeChangedCallback(
+    name: string,
+    oldValue: string,
+    newValue: string
+  ) {
+    if (
+      name === "userid" &&
+      oldValue !== newValue &&
+      newValue
+    ) {
+      console.log("Profile Page:", newValue);
+      this.dispatchMessage({
+        type: "ProfileSelected",
+        userid: newValue
+      });
+    }
+    super.attributeChangedCallback(name, oldValue, newValue);
+  }
 
   render() {
+    const {
+      name,
+    } = (this.profile || {}) as Profile;
     return html`
       <header-bar></header-bar>
       <div class="profile-container">
         <profile-nav selectedLink="profile"></profile-nav>
-        <p class="display-name">Aimee</p>
-        <profile-form path="/profiles/aimee4312"></profile-form>
+        <p class="display-name">${name}</p>
+        <profile-form .using=${this.profile}></profile-form>
       </div>
     `;
   }

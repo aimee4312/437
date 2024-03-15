@@ -13,7 +13,7 @@ router.post("/", (req, res) => {
         .then((collection) => res.status(201).send(collection))
         .catch((err) => res.status(500).send(err));
 });
-router.get("/collection/:collectionName", (req, res) => {
+router.get("/:collectionName", (req, res) => {
     const { collectionName } = req.params;
     collection_1.default
         .get(collectionName)

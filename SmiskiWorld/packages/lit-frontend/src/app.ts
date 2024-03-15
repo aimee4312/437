@@ -34,34 +34,23 @@ export interface ProfileSaved extends MsgType<"ProfileSaved"> {
   profile: Profile;
 }
 
-export interface SmiskiAddedToCollection extends MsgType<"SmiskiAddedToCollection"> {
+export interface SmiskiCollectionUpdated extends MsgType<"SmiskiCollectionUpdated"> {
   userid: string;
-  smiski: Smiski;
+  smiski_owned: string[];
 }
 
-export interface SmiskiRemovedFromCollection extends MsgType<"SmiskiRemovedFromCollection"> {
-  userid: string;
-  smiskiName: string;
-}
 
-export interface SmiskiAddedToWishlist extends MsgType<"SmiskiAddedToWishlist"> {
+export interface SmiskiWishlistUpdated extends MsgType<"SmiskiWishlistUpdated"> {
   userid: string;
-  smiski: Smiski;
-}
-
-export interface SmiskiRemovedFromWishlist extends MsgType<"SmiskiRemovedFromWishlist"> {
-  userid: string;
-  smiskiName: string;
+  wishlist: string[];
 }
 
 export type Message =
   | ProfileSelected
   | ProfileSaved
   | UserLoggedIn
-  | SmiskiAddedToCollection
-  | SmiskiRemovedFromCollection
-  | SmiskiAddedToWishlist
-  | SmiskiRemovedFromWishlist;
+  | SmiskiCollectionUpdated
+  | SmiskiWishlistUpdated
 
 export class Main
   extends MVU.Main<Model, Message>

@@ -4,6 +4,17 @@ import smiskis from "../smiski";
 
 const router = express.Router();
 
+router.get("/", async (req: Request, res: Response) => {
+  try {
+      const allSmiskis = await smiskis.index();
+      res.json(allSmiskis);
+  } catch (err) {
+      console.error("Error fetching all Smiskis:", err);
+      res.status(500).send(err);
+  }
+});
+
+
 router.post("/", (req: Request, res: Response) => {
   const newSmiski = req.body;
 
@@ -13,14 +24,14 @@ router.post("/", (req: Request, res: Response) => {
     .catch((err) => res.status(500).send(err));
 });
 
-router.get("/smiski/:smiskiName", (req: Request, res: Response) => {
+router.get("/:smiskiName", (req: Request, res: Response) => {
   const { smiskiName } = req.params;
 
   smiskis
     .get(smiskiName)
-    .then((smiski: Smiski | undefined) => {
-      if (!smiski) throw "Not found";
-      else res.json(smiski);
+    .then((smiskiName: Smiski | undefined) => {
+      if (!smiskiName) throw "Not found";
+      else res.json(smiskiName);
     })
     .catch((err) => res.status(404).end());
 });

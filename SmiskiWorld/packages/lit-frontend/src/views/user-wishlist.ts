@@ -1,121 +1,109 @@
 import { html, unsafeCSS } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
 import { Profile, Smiski } from "ts-models";
-import { serverPath } from "../rest";
+import { consume } from "@lit/context";
+import { authContext } from "../components/auth-required";
+import { APIUser, APIRequest } from "../rest";
+import * as App from "../app";
 import stylesCSS from "/src/styles/styles.css?inline";
 import profileCSS from "/src/styles/profile.css?inline";
 import "../components/profile-nav";
 import "../components/header-bar";
 import "../components/display-card";
-import * as App from "../app";
 
 @customElement("user-wishlist")
 export class UserWishlistElement extends App.View {
-    @property()
-    path: string = "";
-
     @state()
     profile?: Profile;
- 
+
+    @consume({ context: authContext, subscribe: true })
+    @property({ attribute: false })
+    user = new APIUser();
+
     @state()
     allSmiski: Smiski[] = [];
 
-    // connectedCallback() {
-    //     if (this.path) {
-    //     this._fetchData(this.path);
-    //     }
-    //     super.connectedCallback();
-    // }
-
-    connectedCallback() {
-        //if (this.path) {
-            // this._fetchData(this.path);
-            // Instead of fetching data, assign dummy data for testing
-    
-            // Dummy smiski data
-            this.allSmiski = [
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/littlelifting.png",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-            ];
-        //}
-        super.connectedCallback();
-    }
-    attributeChangedCallback(
-        name: string,
-        oldValue: string,
-        newValue: string
-        ) {
-        if (name === "path" && oldValue !== newValue && oldValue) {
-            this._fetchData(newValue);
-        }
-        super.attributeChangedCallback(name, oldValue, newValue);
-    }
-
     render() {
-        return html`
+        const {
+            wishlist,
+        } = (this.profile || {}) as Profile;
+        const smiskisInWishlist = this.allSmiski.filter(smiski => wishlist.includes(smiski.smiskiName));
+
+    return html`
         <header-bar></header-bar>
         <div class="profile-container">
-                <profile-nav selectedLink="wishlist"></profile-nav>
-                <div class="profile-display">
-                    ${this.allSmiski.map(smiski_owned => html`
+            <profile-nav selectedLink="wishlist"></profile-nav>
+            <div class="profile-display">
+                ${smiskisInWishlist.map(smiski => html`
                     <display-card 
-                        photo="${smiski_owned.photo}"
-                        smiskiName="${smiski_owned.smiskiName}"
-                        collections="${smiski_owned.collections}"
-                        bodyType="${smiski_owned.bodyType}"
-                        found="${smiski_owned.found}"
-                        pose="${smiski_owned.pose}"
-                        description="${smiski_owned.description}"
+                        photo="${smiski.photo}"
+                        smiskiName="${smiski.smiskiName}"
+                        collections="${smiski.collections}"
+                        bodyType="${smiski.bodyType}"
+                        found="${smiski.found}"
+                        pose="${smiski.pose}"
+                        description="${smiski.description}"
                     ></display-card>
-
-                    `)}
-                </div>
+                `)}
             </div>
         </div>
         `;
-        }
+    }
 
     static styles = [
         unsafeCSS(stylesCSS),
         unsafeCSS(profileCSS),
     ];
 
-    _fetchData(path: string) {
-        fetch(serverPath(path))
-        .then((response) => {
-            if (response.status === 200) {
-            return response.json();
-            }
-            return null;
-        })
-        .then((json: unknown) => {
-            if (json) {
-                this.profile = json as Profile;
-                if (this.profile.smiski_owned) {
-                    this.profile.smiski_owned.forEach(smiskiName => this.fetchAndAppendSmiskiDetails(smiskiName));
-                }
-            }
-        });
+    updated(changedProperties: Map<string, unknown>) {
+        console.log("Profile Data has been updated", changedProperties);
+        if (changedProperties.has("user")) {
+            console.log("New user", this.user);
+            const { username } = this.user;
+            this._getData(`/profiles/${username}`);
+        }
+        return true;
     }
 
-    async fetchAndAppendSmiskiDetails(smiskiName: string) {
+    async _getData(path: string) {
+        const request = new APIRequest();
+
         try {
-            const response = await fetch(serverPath(`/api/smiski/${encodeURIComponent(smiskiName)}`));
-            if (response.ok) {
+            const response = await request.get(path);
+            if (response.status === 200) {
                 const data = await response.json();
-                const smiskiDetails = data as Smiski;
-                this.allSmiski = [...this.allSmiski, smiskiDetails];
+                this.profile = data as Profile;
+                console.log("Wishlist:", this.profile?.wishlist);
+                if (Array.isArray(this.profile?.wishlist)) {
+                    const promises = this.profile.wishlist.map(name => this._fetchSmiskiByName(name));
+                    const allSmiski = await Promise.all(promises);
+                    this.allSmiski = allSmiski.filter(smiski => smiski !== null) as Smiski[];
+                } else {
+                    console.error("Wishlist is not an array");
+                }
+            } else {
+                console.error("Failed to fetch profile data");
             }
         } catch (error) {
-            console.error('Error fetching smiski details:', error);
+            console.error("Error fetching wishlist:", error);
         }
     }
+    
+    
+    async _fetchSmiskiByName(name: string): Promise<Smiski | null> {
+        const request = new APIRequest();
+        const path = `/smiskis/${name}`;
+
+        try {
+            const response = await request.get(path);
+            if (response.status === 200) {
+                const smiski = await response.json();
+                return smiski as Smiski;
+            }
+        } catch (error) {
+            console.error("Error fetching Smiski by name:", error);
+        }
+        return null;
+    }
+
 }

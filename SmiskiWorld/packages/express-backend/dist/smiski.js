@@ -7,11 +7,11 @@ const smiski_1 = __importDefault(require("./models/mongo/smiski"));
 function index() {
     return smiski_1.default.find();
 }
-function get(smiski) {
-    return smiski_1.default.find({ smiski })
+function get(smiskiName) {
+    return smiski_1.default.find({ smiskiName })
         .then((list) => list[0])
         .catch((err) => {
-        throw `${smiski} Not Found`;
+        throw `${smiskiName} Not Found`;
     });
 }
 function create(smiski) {

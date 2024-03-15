@@ -1,21 +1,25 @@
-import { html, LitElement, css } from "lit";
+import { html, css } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
 import { ToggleSwitchElement } from "./toggle-switch.ts";
 import { Profile } from "ts-models";
 import { consume } from "@lit/context";
 import { authContext } from "./auth-required";
-import { APIUser } from "../rest";
+import { APIUser, APIRequest } from "../rest";
+import * as App from "../app";
 
 @customElement('header-bar')
-export class HeaderElement extends LitElement {
+export class HeaderElement extends App.View {
   @state()
-    profile?: Profile;
+  profile?: Profile;
 
-    @consume({ context: authContext, subscribe: true })
-    @property({ attribute: false })
-    user = new APIUser();
+  @consume({ context: authContext, subscribe: true })
+  @property({ attribute: false })
+  user = new APIUser();
 
   render() {
+    const {
+      userid,
+    } = (this.profile || {}) as Profile;
     return html`
     <h1>
       <a href="/app">
@@ -31,11 +35,11 @@ export class HeaderElement extends LitElement {
               <use href="/source-images/icons/icon.svg#icon-profile" />
           </svg>
           <ul slot="menu" >
-              <li><a href="/app/profile/aimee4312">Profile</a></li>
+              <li><a href="/app/profile/${userid}">Profile</a></li>
               <li><hr /></li>
-              <li><a href="/app/collection">Collection</a></li>
+              <li><a href="/app/collection">Collection/${userid}</a></li>
               <li><hr /></li>
-              <li><a href="/app/wishlist">Wishlist</a></li>
+              <li><a href="/app/wishlist">Wishlis/${userid}</a></li>
               <li><hr /></li>
               <li><toggle-switch @change=${this._toggleDarkMode}>Dark Mode</toggle-switch></li>
               <li><hr /></li>
@@ -45,7 +49,7 @@ export class HeaderElement extends LitElement {
     </h1>`;
   }
 
-  static styles = css `
+  static styles = css`
     h1 {
       display: flex;
       align-items: center;
@@ -74,6 +78,36 @@ export class HeaderElement extends LitElement {
     }
   `;
 
+  updated(changedProperties: Map<string, unknown>) {
+    console.log(
+      "Profile Data has been updated",
+      changedProperties
+    );
+    if (changedProperties.has("user")) {
+      console.log("New user", this.user);
+      const { username } = this.user;
+      this._getData(`/profiles/${username}`);
+    }
+    return true;
+  }
+
+  _getData(path: string) {
+    const request = new APIRequest();
+
+    request
+      .get(path)
+      .then((response: Response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return null;
+      })
+      .then((json: unknown) => {
+        console.log("Profile:", json);
+        this.profile = json as Profile;
+      });
+  }
+
   _toggleDarkMode(ev: InputEvent) {
     const target = ev.target as ToggleSwitchElement;
     const body = document.body;
@@ -85,5 +119,5 @@ export class HeaderElement extends LitElement {
   _signOut() {
     console.log("Signout");
     this.user.signOut();
-}
+  }
 }

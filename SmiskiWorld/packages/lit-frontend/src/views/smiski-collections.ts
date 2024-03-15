@@ -1,107 +1,25 @@
 import { css, html, unsafeCSS } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
-import { Collections, Smiski } from "ts-models";
-//import { serverPath } from "../rest";
+import { customElement, state } from "lit/decorators.js";
+import { Smiski } from "ts-models";
+import { APIRequest } from "../rest";
+import * as App from "../app";
 import stylesCSS from "/src/styles/styles.css?inline";
 import cardCSS from "/src/styles/card.css?inline";
 import "../components/header-bar";
 import "../components/display-card";
-import * as App from "../app";
 
 @customElement("smiski-collection")
 export class SmiskiCollectionElement extends App.View {
-    @property()
-    path: string = "";
-
     @state()
     allSmiski: Smiski[] = [];
 
-    @state()
-    allCollection: Collections[] = [];
-
-    connectedCallback() {
-        //if (this.path) {
-            // this._fetchData(this.path);
-            // Instead of fetching data, assign dummy data for testing
-    
-            // Dummy smiski data
-            this.allSmiski = [
-                { 
-                    smiskiName: "Smiski Hugging Knees",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/huggingknees.png",
-                    special: false,
-                    bodyType: "Normal",
-                    found: "In corners of a room",
-                    pose: "Kneeling",
-                    description: "Always in the corner hugging onto the knees, staring out into the distance pensive in thought.",
-                },
-                { 
-                    smiskiName: "Smiski Looking Back",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/lookingback.png",
-                    special: false,
-                    bodyType: "Chubby",
-                    found: "In corners of a room",
-                    pose: "Looking back",
-                    description: "A Smiski that scares easily. When found, it will turn back and stare at you in surprise.",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/littlelifting.png",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/littlelifting.png",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/littlelifting.png",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/littlelifting.png",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-                { 
-                    smiskiName: "Little Smiski Lifting",
-                    collections: "Series 1",
-                    photo: "/source-images/smiskis/littlelifting.png",
-                    special: true,
-                    bodyType: "",
-                    found: "",
-                    pose: "",
-                    description: "He's tiny but strong!",
-                },
-            ];
-        //}
+    async connectedCallback() {
         super.connectedCallback();
+        await this._fetchAllSmiskis();
     }
 
     render() {
+        console.log('Rendering component: ', this.allSmiski);
         return html`
             <header-bar></header-bar>
             <div class="profile-container">
@@ -129,5 +47,22 @@ export class SmiskiCollectionElement extends App.View {
         unsafeCSS(cardCSS),
         css`
     `];
-
+    
+    async _fetchAllSmiskis(): Promise<Smiski[] | null> {
+        const request = new APIRequest();
+        const path = `/smiskis`;
+        try {
+            const response = await request.get(path);
+            if (response.status === 200) {
+                const smiskis = await response.json();
+                this.allSmiski = smiskis as Smiski[];
+                return smiskis as Smiski[];
+            }
+        } catch (error) {
+            console.error("Error fetching all Smiskis:", error);
+        }
+        return null;
+    }
+    
+    
 }
